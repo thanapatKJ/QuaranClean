@@ -30,6 +30,16 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 Descriptions
 - สามารถ Run Application บนมือถือได้
 - Install Package 
-    - navigation stack, bottom-tab, 
-    - Setup vector-icon
-- ย้าย components กับ Screens มาไว้
+    - react-native-maps
+
+- การ setup react-native-maps
+    - android/app/src/main/AndroidManifest.xml ใส่โค้ดต่อไปนี้ใต้ tag <application>
+       <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+   <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="YOUR_API_KEY"/> <!-- Your key goes here. -->
+ 
+   <!-- You will also only need to add this uses-library tag -->
+   <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
+- เมื่อกดมาที่หน้า Home จะพบเห็นว่ามี Google Map เรียกมาที่จุด Latitude Longitude ที่กำหนด และมีวงกลมล้อมรอบ
