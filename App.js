@@ -1,104 +1,67 @@
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors, 
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Register from './Screens/frontpage/Register';
+import Login from './Screens/frontpage/Login';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+import ChangePassword from './Screens/tab/ChangePassword';
+import Home from './Screens/tab/Home';
+import Profile from './Screens/tab/Profile';
+import QuarantinePlace from './Screens/tab/QuarantinePlace';
+import Verify from './Screens/tab/Verify';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+const navOptionHandler = () => ({
+  headerShown: false
+})
+
+console.disableYellowBox = true;
+
+const StackApp = createStackNavigator();
+
+const ProfileStack = createStackNavigator();
+function ProfileNavigator() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+    <ProfileStack.Navigator initialRouteName="Profile">
+      <ProfileStack.Screen name="Profile" component={Profile} options={navOptionHandler} />
+      <ProfileStack.Screen name="ChangePassword" component={ChangePassword} />
+    </ProfileStack.Navigator>
+  )
+}
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+const Tab = createBottomTabNavigator();
+function AppTab() {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <Tab.Navigator initialRouteName="Home" backBehavior="none">
+      <Tab.Screen name="Home" component={Home} options={{
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="human-greeting" color={color} size={size} />),}} />
+      <Tab.Screen name="Place" component={QuarantinePlace} options={{
+        tabBarLabel: 'Place',
+        tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="hospital-building" color={color} size={size} />),}} />
+      <Tab.Screen name="Verify" component={Verify} options={{
+        tabBarLabel: 'Verify',
+        tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="alarm-check" color={color} size={size} />),}} />
+      <Tab.Screen name="Profile" component={ProfileNavigator} options={{
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="clipboard-text-multiple-outline" color={color} size={size} />),}} />
+    </Tab.Navigator>
+  )
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <StackApp.Navigator initialRouteName="Login">
+        <StackApp.Screen name="Login" component={Login} options={navOptionHandler} />
+        <StackApp.Screen name="Register" component={Register} />
+        <StackApp.Screen name="Tab" component={AppTab} options={navOptionHandler} />
+      </StackApp.Navigator>
+    </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+}

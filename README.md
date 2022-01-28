@@ -24,3 +24,12 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 - Maps
 "react-native-maps": "0.30.1",
+
+
+
+Descriptions
+- สามารถ Run Application บนมือถือได้
+- Install Package 
+    - navigation stack, bottom-tab, 
+    - Setup vector-icon
+- ย้าย components กับ Screens มาไว้
