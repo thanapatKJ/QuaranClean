@@ -4,13 +4,11 @@ import Header from '../../components/Header';
 import Map from '../../components/Maps';
 // import Map from '../../components/Maps_test';
 
-export default class Home extends Component {
-  render() {
-    return (
-      <View>
-        <Header />
-        <Map />
-      </View>
-    );
-  }
+export default function Home({ navigation }) {
+  return (
+    <View>
+      <Header />
+      <Map />
+    </View>
+  );
 }
