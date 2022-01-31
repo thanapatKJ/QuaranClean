@@ -1,44 +1,97 @@
-import React, { Component, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
+import { Context } from '../../components/globalContext/globalContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login({ navigation }) {
+export default function Login({ navigation, route, props }) {
+  const globalContext = useContext(Context)
+  const {
+    isLoggedIn, setIsLoggedIn,
+    userObj, setUserObj,
+    setToken, getToken } = globalContext;
 
-  const [idcard, _idcard] = useState('');
-  const [password, _password] = useState('');
-  const [result, _result] = useState('');
+  const [idcard, _idcard] = useState();
+  const [password, _password] = useState("");
+  const [result, _result] = useState();
+  const [error, setError] = useState("")
 
-  sendLoginData = () => {
-    // ส่งข้อมูล login 
-    // let post_data = {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //     // 'X-CSRFToken':  cookie.load('csrftoken')
-    //   },
-    //   body: JSON.stringify({
-    //     'username': "1102002747935",
-    //     'first_name': 'thanapat',
-    //     'last_name': 'klayjamlang',
-    //     'email': 'thanapatkjm@gmail.com',
-    //     'password': "dra",
-    //     'id_cards': '1102002747935',
-    //     'numbers': '0945542613'
-    //   })
-    // }
-    // fetch('http://192.168.175.50:8000/api/register/',post_data)
-    //   .then(response => response.json())
-    //   .then(data => { console.log(data) })
-    //   .catch(error => { Alert.alert(error.message) })
+  useEffect(() => {
+    getToken()
+      .then(data => {
+        fetch('http://192.168.175.50:8000/api/check/', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + data
+          }
+        })
 
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            } else {
+              // setError("Invalid Credentials")
+              throw res.json()
+            }
+          })
+          .then(json => {
+            console.log(json)
+            // console.log('status ' + json.status)
+            if (json.status === "success") {
+              setUserObj(json)
+              setIsLoggedIn(true)
+              navigation.replace('Tab')
+            }
+          })
+      })
+      .catch(error => {
+        console.log("ERROR " + error)
+      })
+  })
+  function sendLoginData() {
+    setError("")
+    let body = JSON.stringify({
+      'username': idcard,
+      'password': password
+    })
+    fetch('http://192.168.175.50:8000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: body
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        } else {
+          setError("Invalid Credentials")
+          throw res.json()
+        }
+      })
+      .then(json => {
+        setUserObj(json)
+        setToken(json.token)
+        getToken()
+          .then(data => data)
+          .then(value => {
+            console.log(value)
+          })
+        setIsLoggedIn(true)
+        navigation.replace('Tab')
+      })
+      .catch(error => {
+        console.log(error)
+      })
 
-    // Alert.alert(idcard + " " + password);
-    // navigation.replace('Tab')
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Welcome to QuaranClean</Text>
+      <Text style={{ color: '#cc0404' }}>{error}</Text>
       <TextInput
         style={styles.input}
         placeholder="ID card Number"

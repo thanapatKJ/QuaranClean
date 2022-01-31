@@ -37,7 +37,7 @@ export default function Register({ navigation }) {
         .then(response => response.json())
         .then(data => { console.log(data) })
         // .then({ navigate('Login')} )
-        .then({})
+        // .then({})
         .catch(error => { Alert.alert(error.message) })
       navigation.navigate('Login')
     } else {

@@ -11,7 +11,7 @@ Openjdk RE 18.9 b11.0.2+9
 
 - Packages Installation
 
-React Navigation v5
+- React Navigation v5
 "react-native-vector-icons": "^9.0.0",
 "@react-navigation/bottom-tabs": "^5.11.15",
 "@react-navigation/native": "^5.9.8",
@@ -25,10 +25,19 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - Maps
 "react-native-maps": "0.30.1",
 
+- Axios
+"axios": "^0.25.0",
+
+- AsyncStorage
+"@react-native-async-storage/async-storage": "^1.15.17",
 
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- สามารถใช้ Register screen ได้
-    - หากมีการใส่ password ไม่ตรงจะ alert password does not match
-- เปลี่ยน component ของทุก screen จาก class เป็น function
+- Package Install
+    - npm install --save axios
+    - npm install @react-native-async-storage/async-storage
+
+- Login โดยใช้ JWT จาก server โดยนำ JWT ใน internal storage มาส่งคำขอตรวจสอบเมื่อเข้าหน้า Login
+- Profile ดูข้อมูลได้แล้ว
+- Logout ได้ โดนลบ JWT ที่เก็บไว้ใน Internal Storage ไปเช็คที่ server

@@ -1,31 +1,12 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 import Header from '../../components/Header';
 
 
 export default function QuarantinePlace({ navigation }) {
-  // constructor(props){
-  //   super(props);
 
-  //   this.state = {
-  //     name:"",
-  //     lati:"",
-  //     longi:"",
-  //     detail:"",
-  //   }
-  // }
   sendPlaceData = () => {
-    // fetch('http://localhost:8000/api/place_api/',{
-    //   method: 'POST',
-    //   body:JSON.stringify({
-    //     "name":this.state.name,
-    //     "lati":this.state.lati,
-    //     "longi":this.state.longi,
-    //     "detail":this.state.detail,
-    //   })
-    // }).then((response)=>Alert.alert(JSON.stringify(response.json())))
-    // .then(()=>Alert.alert("Sent Data"))
-    // .catch((error)=>{Alert.alert(error.message)})
+
   }
   return (
     <SafeAreaView>
@@ -50,9 +31,17 @@ export default function QuarantinePlace({ navigation }) {
       />
       <TextInput
         style={styles.input}
+        placeholder="radius(meters)"
+        keyboardType="number-pad"
+      // onChangeText={(text)=>this.setState({detail:text})}
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Detail"
       // onChangeText={(text)=>this.setState({detail:text})}
       />
+
+
       <Button title="Confirm" onPress={sendPlaceData} />
     </SafeAreaView>
   );
