@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
-import { parseSync } from '@babel/core';
 import { useIsFocused } from '@react-navigation/native';
 
 export default function Profile({ navigation, props }) {
@@ -43,7 +42,6 @@ export default function Profile({ navigation, props }) {
               }
             })
             .then(json => {
-              console.log('EMAIL '+json.email)
               _name(json.first_name)
               _lastname(json.last_name)
               _idcard(json.id_cards)

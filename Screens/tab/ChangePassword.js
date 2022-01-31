@@ -1,52 +1,83 @@
-import React, { Component } from 'react';
-import { StyleSheet, Button, View, SafeAreaView, Text, Alert,TextInput, TextComponent } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput, TextComponent } from 'react-native';
+import { Context } from '../../components/globalContext/globalContext';
 
-export default class ChangePassword extends Component {
-  constructor(props){
-    super(props);
-    this.state  = {
-      Opassword:"",
-      Cpassword:"",
-      Npassword:"",
+export default function ChangePassword({ navigation }) {
+  const globalContext = useContext(Context)
+  const {
+    isLoggedIn, setIsLoggedIn,
+    userObj, setUserObj,
+    setToken, getToken,
+    removeToken } = globalContext;
+
+  const [opassword, _opassword] = useState('');
+  const [npassword, _npassword] = useState('');
+  const [cpassword, _cpassword] = useState('');
+
+  function sendChangePassword() {
+    if (npassword === cpassword && (opassword && npassword && cpassword)) {
+      getToken()
+        .then(data => {
+          fetch('http://192.168.175.50:8000/api/profile/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + data
+            },
+            body: JSON.stringify({
+              'opassword': opassword,
+              'npassword': npassword
+            })
+          })
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else {
+                Alert.alert('Old password not correct.')
+              }
+            })
+            .then(json => {
+              console.log(json)
+              if (json.status === 'success') {
+                removeToken()
+                setUserObj('')
+                setIsLoggedIn(false)
+                navigation.replace('Login')
+                console.log('success')
+              }
+            })
+        })
+        .catch(error => {
+          console.log("ERROR " + error)
+        })
+    } else {
+      Alert.alert('Please fill All the box correctly.')
     }
   }
-  sendChangePassword = () => {
-    if(this.state.Npassword==this.state.Cpassword){
-      fetch('http://localhost:8000/api/user_id',{
-        method:'PATCH',
-        body:JSON.stringify({
-          "oldPassword": this.state.Opassword,
-          "newPasword":this.state.Npassword,
-        })
-      })
-    }    
-    Alert.alert("ChangePassword")
-    this.props.navigation.navigate('Profile');
-  }
-  render(){
-    return(
+  return (
     <View>
-        <Text style={styles.title}>ChangePassword</Text>
-        <TextInput style={styles.input}
-          placeholder="Old Password"
-          secureTextEntry={true}
-          onChangeText={(text)=> this.setState({Opassword})}
-        />
-        <TextInput style={styles.input}
-          placeholder="New Password"
-          secureTextEntry={true}
-          onChangeText={(text)=> this.setState({Npassword})}
-        />
-        <TextInput style={styles.input}
-          placeholder="Confirm New Password"
-          secureTextEntry={true}
-          onChangeText={(text)=>this.setState({Cpassword})}
-        />
-        <Button title="Confirm" onPress={this.sendChangePassword}/>
+      <Text style={styles.title}>ChangePassword</Text>
+      <TextInput style={styles.input}
+        placeholder="Old Password"
+        secureTextEntry={true}
+        onChangeText={opassword => _opassword(opassword)}
+      />
+      <TextInput style={styles.input}
+        placeholder="New Password"
+        secureTextEntry={true}
+        onChangeText={npassword => _npassword(npassword)}
+      />
+      <TextInput style={styles.input}
+        placeholder="Confirm New Password"
+        secureTextEntry={true}
+        onChangeText={cpassword => _cpassword(cpassword)}
+      />
+      <Button title="Confirm" onPress={sendChangePassword} />
     </View>
-    );
-  }
+  );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 16,
   },
-    title: {
+  title: {
     textAlign: 'center',
     marginVertical: 8,
     fontSize: 36,
@@ -64,7 +95,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-    input: {
+  input: {
     height: 40,
     margin: 12,
     borderWidth: 1,

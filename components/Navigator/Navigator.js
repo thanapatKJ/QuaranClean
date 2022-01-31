@@ -4,7 +4,7 @@ import { View } from 'react-native';
 // Front Page
 import Register from '../../Screens/frontpage/Register';
 import Login from '../../Screens/frontpage/Login';
-import Landing from '../../Screens/frontpage/Landing';
+// import Landing from '../../Screens/frontpage/Landing';
 
 // Tab
 import Home from '../../Screens/tab/Home';

@@ -34,10 +34,5 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- Package Install
-    - npm install --save axios
-    - npm install @react-native-async-storage/async-storage
-
-- Login โดยใช้ JWT จาก server โดยนำ JWT ใน internal storage มาส่งคำขอตรวจสอบเมื่อเข้าหน้า Login
-- Profile ดูข้อมูลได้แล้ว
-- Logout ได้ โดนลบ JWT ที่เก็บไว้ใน Internal Storage ไปเช็คที่ server
+- Profile
+    - สามารถ ChangePassword แล้วออกไปที่หน้า login ได้

@@ -11,9 +11,6 @@ export default function Register({ navigation }) {
   const [cpassword, _cpassword] = useState('');
   const [email, _email] = useState('');
 
-  // const checkTextInput = () => {
-  //   if (!)
-  // }
   sendRegisterData = () => {
     if (password == cpassword) {
       let post_data = {
@@ -43,25 +40,6 @@ export default function Register({ navigation }) {
     } else {
       Alert.alert('Password does not match')
     }
-    
-    // if(this.state.Cpassword==this.state.password){
-    //   // Alert.alert(this.state.name+'\n'+this.state.lastname)
-    //   fetch('http://localhost:8000/api/user_api/',{
-    //     method: 'POST',
-    //     body:JSON.stringify({
-    //       "user_id": this.state.user_id,
-    //       "name": this.state.name,
-    //       "lastname": this.state.lastname,
-    //       "P_number": this.state.P_number,
-    //       "Email": this.state.Email,
-    //       "password": this.state.password,
-
-    //     })
-    //   }).then((response)=>Alert.alert(JSON.stringify(response.json())))
-    //   .then(()=>this.props.navigation.navigate('Login'))
-    //   .catch((error)=>{Alert.alert(error.message)})
-    // }
-    // else{Alert.alert("Confirm Password is incorrect.")}
   }
   return (
     <SafeAreaView style={styles.container}>
