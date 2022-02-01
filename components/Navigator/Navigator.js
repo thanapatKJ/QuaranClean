@@ -43,7 +43,14 @@ function ProfileNavigator() {
 const Tab = createBottomTabNavigator();
 function AppTab() {
     return (
-        <Tab.Navigator initialRouteName="Home" backBehavior="none">
+        <Tab.Navigator
+            initialRouteName="Home"
+            backBehavior="none"
+            tabBarOptions={{
+                keyboardHidesTabBar: true
+            }}
+
+        >
             <Tab.Screen name="Home" component={Home} options={{
                 tabBarLabel: 'Home',
                 tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="human-greeting" color={color} size={size} />),
@@ -63,21 +70,21 @@ function AppTab() {
         </Tab.Navigator>
     )
 }
-
+ 
 export default function Navigator() {
     const globalContext = useContext(Context)
     const { isLoggedIn, userObj } = globalContext;
 
     return (
         <StackApp.Navigator initialRouteName="Login">
-            {(!isLoggedIn || !userObj)?
-            <>
-            {/* <StackApp.Screen name="Landing" component={Landing} options={navOptionHandler} /> */}
-            <StackApp.Screen name="Login" component={Login} options={navOptionHandler} />
-            <StackApp.Screen name="Register" component={Register} />
-            </>
-            :
-            <StackApp.Screen name="Tab" component={AppTab} options={navOptionHandler} />
+            {(!isLoggedIn || !userObj) ?
+                <>
+                    {/* <StackApp.Screen name="Landing" component={Landing} options={navOptionHandler} /> */}
+                    <StackApp.Screen name="Login" component={Login} options={navOptionHandler} />
+                    <StackApp.Screen name="Register" component={Register} />
+                </>
+                :
+                <StackApp.Screen name="Tab" component={AppTab} options={navOptionHandler} />
             }
         </StackApp.Navigator>
     )

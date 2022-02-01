@@ -1,5 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Button,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Text,
+  Alert,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import Header from '../../components/Header';
 import { useIsFocused } from '@react-navigation/native';
 import { Context } from '../../components/globalContext/globalContext';
@@ -13,18 +23,24 @@ export default function QuarantinePlace({ navigation }) {
     setToken, getToken,
     removeToken } = globalContext;
   const isFocused = useIsFocused();
+  const [status, _status] = useState();
+  const [name, _name] = useState('');
+  const [lat, _lat] = useState('');
+  const [long, _long] = useState('');
+  const [radius, _radius] = useState('');
+  const [address, _address] = useState('');
 
   useEffect(() => {
     if (isFocused) {
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/profile/', {
+          fetch('http://192.168.175.50:8000/api/quarantine/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
               'Authorization': 'Token ' + data
-            }
+            },
           })
             .then(res => {
               if (res.ok) {
@@ -35,16 +51,17 @@ export default function QuarantinePlace({ navigation }) {
               }
             })
             .then(json => {
-              console.log('EMAIL ' + json.email)
-              _name(json.first_name)
-              _lastname(json.last_name)
-              _idcard(json.id_cards)
-              _numbers(json.numbers)
-              _email(json.email)
+              _status(json.status)
+              _name(json.name)
+              _lat(json.lat)
+              _long(json.long)
+              _radius(json.radius)
+              _address(json.address)
+              console.log('status ' + status)
             })
         })
         .catch(error => {
-          console.log("ERROR " + error)
+          Alert.alert("ERROR " + error)
         })
     }
   })
@@ -53,41 +70,63 @@ export default function QuarantinePlace({ navigation }) {
 
   }
   return (
-    <SafeAreaView>
+    // <KeyboardAvoidingView
+    //   behavior="padding" >
+    <View>
       <Header />
-      <Text style={styles.title}>Quarantine Place</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-      // onChangeText={(text)=>this.setState({name:text})}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Latitude"
-        keyboardType="numeric"
-      // onChangeText={(text)=>this.setState({lati:text})}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Longtitude"
-        keyboardType="numeric"
-      // onChangeText={(text)=>this.setState({longi:text})}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="radius(meters)"
-        keyboardType="number-pad"
-      // onChangeText={(text)=>this.setState({detail:text})}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Detail"
-      // onChangeText={(text)=>this.setState({detail:text})}
-      />
-
-
-      <Button title="Confirm" onPress={sendPlaceData} />
-    </SafeAreaView>
+      {/* <ScrollView> */}
+        <Text style={styles.title}>Quarantine Place</Text>
+        <Text>Place Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          onChangeText={name => _name(name)}
+          editable={!status}
+          defaultValue={name}
+        />
+        <Text>Latitude</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Latitude"
+          keyboardType="numeric"
+          onChangeText={lat => _lat(lat)}
+          editable={!status}
+          defaultValue={lat}
+        />
+        <Text>Longitude</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Longtitude"
+          keyboardType="numeric"
+          onChangeText={long => _long(long)}
+          editable={!status}
+          defaultValue={long}
+        />
+        <Text>Radius(meters)</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="radius(meters)"
+          keyboardType="number-pad"
+          onChangeText={radius => _radius(radius)}
+          editable={!status}
+          defaultValue={radius}
+        />
+        <Text>Address</Text>
+        <TextInput
+          multiline={true}
+          numbersOfLine={4}
+          style={styles.input}
+          placeholder="Address"
+          onChangeText={address => _address(address)}
+          editable={!status}
+          defaultValue={address}
+        />
+        {status
+          ? <></>
+          : <Button title="Confirm" onPress={sendPlaceData} />
+        }
+      {/* </ScrollView> */}
+    </View>
   );
 }
 
