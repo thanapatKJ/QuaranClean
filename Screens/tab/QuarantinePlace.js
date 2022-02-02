@@ -22,6 +22,7 @@ export default function QuarantinePlace({ navigation }) {
     userObj, setUserObj,
     setToken, getToken,
     removeToken } = globalContext;
+
   const isFocused = useIsFocused();
   const [status, _status] = useState();
   const [name, _name] = useState('');
@@ -29,8 +30,12 @@ export default function QuarantinePlace({ navigation }) {
   const [long, _long] = useState('');
   const [radius, _radius] = useState('');
   const [address, _address] = useState('');
+  const [start_datetime, _start_datetime] = useState('');
+  const [end_datetime, _end_datetime] = useState('');
+
 
   useEffect(() => {
+    console.log('QuranPlace Screen')
     if (isFocused) {
       getToken()
         .then(data => {
@@ -57,7 +62,9 @@ export default function QuarantinePlace({ navigation }) {
               _long(json.long)
               _radius(json.radius)
               _address(json.address)
-              console.log('status ' + status)
+              _start_datetime(json.start_datetime)
+              _end_datetime(json.end_datetime)
+              console.log(json)
             })
         })
         .catch(error => {
@@ -66,67 +73,73 @@ export default function QuarantinePlace({ navigation }) {
     }
   })
 
-  sendPlaceData = () => {
-
+  const sendPlaceData = () => {
   }
+
+
   return (
-    // <KeyboardAvoidingView
-    //   behavior="padding" >
-    <View>
-      <Header />
-      {/* <ScrollView> */}
-        <Text style={styles.title}>Quarantine Place</Text>
-        <Text>Place Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          onChangeText={name => _name(name)}
-          editable={!status}
-          defaultValue={name}
-        />
-        <Text>Latitude</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Latitude"
-          keyboardType="numeric"
-          onChangeText={lat => _lat(lat)}
-          editable={!status}
-          defaultValue={lat}
-        />
-        <Text>Longitude</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Longtitude"
-          keyboardType="numeric"
-          onChangeText={long => _long(long)}
-          editable={!status}
-          defaultValue={long}
-        />
-        <Text>Radius(meters)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="radius(meters)"
-          keyboardType="number-pad"
-          onChangeText={radius => _radius(radius)}
-          editable={!status}
-          defaultValue={radius}
-        />
-        <Text>Address</Text>
-        <TextInput
-          multiline={true}
-          numbersOfLine={4}
-          style={styles.input}
-          placeholder="Address"
-          onChangeText={address => _address(address)}
-          editable={!status}
-          defaultValue={address}
-        />
-        {status
-          ? <></>
-          : <Button title="Confirm" onPress={sendPlaceData} />
-        }
-      {/* </ScrollView> */}
-    </View>
+    <KeyboardAvoidingView
+      behavior="padding" >
+      <View>
+        <Header />
+        <ScrollView>
+          <Text style={styles.title}>Quarantine Place</Text>
+          <Text>Place Name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            onChange={event => _name(event.nativeEvent.target.value)}
+            editable={!status}
+            defaultValue={name}
+          />
+          <Text>Latitude</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Latitude"
+            keyboardType="numeric"
+            onChange={event => _lat(event.nativeEvent.target.value)}
+            editable={!status}
+            defaultValue={lat}
+          />
+          <Text>Longitude</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Longtitude"
+            keyboardType="numeric"
+            onChange={event => _long(event.nativeEvent.target.value)}
+            editable={!status}
+            defaultValue={long}
+          />
+          <Text>Radius(meters)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="radius(meters)"
+            keyboardType="number-pad"
+            onChange={event => _radius(event.nativeEvent.target.value)}
+            editable={!status}
+            defaultValue={radius}
+          />
+          <Text>Address</Text>
+          <TextInput
+            multiline={true}
+            numbersOfLine={4}
+            style={styles.input}
+            placeholder="Address"
+            onChange={event => _address(event.nativeEvent.target.value)}
+            editable={!status}
+            defaultValue={address}
+          />
+          {status
+            ?
+            <View>
+              <Text>Start Datetime : {start_datetime}</Text>
+              <Text>End Datetime : {end_datetime}</Text>
+            </View>
+            : <Button title="Confirm" onPress={sendPlaceData} />
+          }
+        </ScrollView>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

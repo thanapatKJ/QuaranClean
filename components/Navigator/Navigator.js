@@ -49,7 +49,6 @@ function AppTab() {
             tabBarOptions={{
                 keyboardHidesTabBar: true
             }}
-
         >
             <Tab.Screen name="Home" component={Home} options={{
                 tabBarLabel: 'Home',
@@ -70,7 +69,6 @@ function AppTab() {
         </Tab.Navigator>
     )
 }
- 
 export default function Navigator() {
     const globalContext = useContext(Context)
     const { isLoggedIn, userObj } = globalContext;

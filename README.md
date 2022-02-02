@@ -39,8 +39,4 @@ Descriptions
         - true : จะถือว่ามีการ quarantine แล้ว ให้แสดง circle
         - false : จะถือว่ายังไม่มีการ quarantine ไม่แสดง circle และแสดงข้อความ
 - QuarantinePlace
-    - เชื่อมกับ server หาก status เป็น
-        - true : จะแสดงวันเวลา รายละเอียดสถานที่ ที่ทำการ quarantine ไม่สามารถแก้ไขได้ ต้องกด cancel อย่างเดียว
-        - false : จะแสดง textinput มาให้กรอก
-    - bug
-        - เมื่อกรอก textinput ไปแล้ว จะมีการ update log อัตโนมัติ เสมือนมีการเรียกใช้ useEffect ตลอดเวลา
+    - fix bug
