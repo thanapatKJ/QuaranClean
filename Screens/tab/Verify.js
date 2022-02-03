@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 import { fonts } from 'react-native-elements/dist/config';
+import { useEffect } from 'react/cjs/react.development';
 import Header from '../../components/Header';
 
 
 export default function Verify({ navigation }) {
-  sendVerify = () => {
+  useEffect(()=>{
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Verify Screen')
+    })
+    return unsubscribe;
+  })
+
+  function sendVerify(){
     Alert.alert("Send Verify Signal to server")
   }
   return (

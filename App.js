@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
+import { LogBox, View } from 'react-native';
 
 import Navigator from './components/Navigator/Navigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Context,Provider } from './components/globalContext/globalContext';
 
 console.disableYellowBox = true;
+// LogBox.ignoreAllLogs()
 
 export default function App() {
   return (

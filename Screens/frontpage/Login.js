@@ -16,38 +16,41 @@ export default function Login({ navigation, route, props }) {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    getToken()
-      .then(data => {
-        fetch('http://192.168.175.50:8000/api/check/', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + data
-          }
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Login Screen')
+      getToken()
+        .then(data => {
+          fetch('http://192.168.175.50:8000/api/check/', {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + data
+            }
+          })
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else {
+                // setError("Invalid Credentials")
+                throw res.json()
+              }
+            })
+            .then(json => {
+              console.log(json)
+              // console.log('status ' + json.status)
+              if (json.status === "success") {
+                setUserObj(json)
+                setIsLoggedIn(true)
+                navigation.replace('Tab')
+              }
+            })
         })
-
-          .then(res => {
-            if (res.ok) {
-              return res.json()
-            } else {
-              // setError("Invalid Credentials")
-              throw res.json()
-            }
-          })
-          .then(json => {
-            console.log(json)
-            // console.log('status ' + json.status)
-            if (json.status === "success") {
-              setUserObj(json)
-              setIsLoggedIn(true)
-              navigation.replace('Tab')
-            }
-          })
-      })
-      .catch(error => {
-        console.log("ERROR " + error)
-      })
+        .catch(error => {
+          console.log("ERROR " + error)
+        })
+    })
+    return unsubscribe;
   })
   function sendLoginData() {
     setError("")
@@ -75,9 +78,11 @@ export default function Login({ navigation, route, props }) {
         setUserObj(json)
         setToken(json.token)
         getToken()
-          .then(data => data)
+          .then(data => {
+            console.log('data ' + data)
+          })
           .then(value => {
-            console.log(value)
+            console.log('value ' + value)
           })
         setIsLoggedIn(true)
         navigation.replace('Tab')

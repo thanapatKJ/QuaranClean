@@ -34,9 +34,7 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- Home
-    - เชื่อมกับ server หาก status เป็น 
-        - true : จะถือว่ามีการ quarantine แล้ว ให้แสดง circle
-        - false : จะถือว่ายังไม่มีการ quarantine ไม่แสดง circle และแสดงข้อความ
+- เปลี่ยน ifFocused เป็น addListener เพื่อให้แต่ละหน้าทำงานแค่ครั้งเดียวเมื่อเปิดหน้านั้นๆ ไม่ให้มีการส่งข้อมูลบ่อย
 - QuarantinePlace
-    - fix bug
+    - fix bug ใส่ข้อความแล้วลบเอง
+    - เพิ่ม Quit เพื่อส่ง delete

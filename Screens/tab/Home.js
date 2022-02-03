@@ -29,7 +29,8 @@ export default function Home({ navigation }) {
 
 
   useEffect(() => {
-    if (isFocused) {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Home Screen')
       getToken()
         .then(data => {
           fetch('http://192.168.175.50:8000/api/quarantine/', {
@@ -55,7 +56,8 @@ export default function Home({ navigation }) {
         .catch(error => {
           Alert.alert("ERROR " + error)
         })
-    }
+    })
+    return unsubscribe;
   })
   return (
     <View>
@@ -109,9 +111,9 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   bubble: {
-    backgroundColor: 'rgba(2,255,255,0.1)',
+    backgroundColor: 'rgba(102,248,161,0.35)',
     paddingHorizontal: 18,
-    paddingVertical: 12,
+    paddingVertical: 18,
     borderRadius: 20,
   },
   latlng: {

@@ -21,7 +21,8 @@ export default function Profile({ navigation, props }) {
 
   useEffect(() => {
 
-    if (isFocused) {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('Profile Screen')
       getToken()
         .then(data => {
           fetch('http://192.168.175.50:8000/api/profile/', {
@@ -32,7 +33,7 @@ export default function Profile({ navigation, props }) {
               'Authorization': 'Token ' + data
             }
           })
-          
+
             .then(res => {
               if (res.ok) {
                 return res.json()
@@ -52,7 +53,8 @@ export default function Profile({ navigation, props }) {
         .catch(error => {
           console.log("ERROR " + error)
         })
-    }
+    })
+    return unsubscribe;
   })
   function logout() {
     try {
@@ -87,7 +89,7 @@ export default function Profile({ navigation, props }) {
       <Text>Email: {email}</Text>
       <Button
         title='change password'
-        onPress={()=> navigation.navigate('ChangePassword')}
+        onPress={() => navigation.navigate('ChangePassword')}
       />
       <Button
         title='Sign Out'

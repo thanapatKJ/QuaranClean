@@ -11,7 +11,7 @@ const Provider = ({ children }) => {
     const setToken = async (token) => {
         try {
             await AsyncStorage.setItem('@token', token)
-            console.log('Set Token')
+            // console.log('Set Token')
         } catch (error) {
             console.log(error)
         }
@@ -20,7 +20,7 @@ const Provider = ({ children }) => {
         try {
             const value = await AsyncStorage.getItem('@token')
             if (value !== null) {
-                console.log('get Token '+value)
+                // console.log('get Token '+value)
                 return value
             }
         } catch (error) {
@@ -33,7 +33,7 @@ const Provider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
-        console.log('Remove Token from @token storage')
+        // console.log('Remove Token from @token storage')
     }
 
     const globalContext = {

@@ -35,8 +35,8 @@ export default function QuarantinePlace({ navigation }) {
 
 
   useEffect(() => {
-    console.log('QuranPlace Screen')
-    if (isFocused) {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('QuaranPlace Screen')
       getToken()
         .then(data => {
           fetch('http://192.168.175.50:8000/api/quarantine/', {
@@ -51,19 +51,77 @@ export default function QuarantinePlace({ navigation }) {
               if (res.ok) {
                 return res.json()
               } else {
-                // setError("Invalid Credentials")
                 throw res.json()
               }
             })
             .then(json => {
-              _status(json.status)
-              _name(json.name)
-              _lat(json.lat)
-              _long(json.long)
-              _radius(json.radius)
-              _address(json.address)
-              _start_datetime(json.start_datetime)
-              _end_datetime(json.end_datetime)
+              if (json.status) {
+                _status(json.status)
+                _name(json.name)
+                _lat(json.lat)
+                _long(json.long)
+                _radius(json.radius)
+                _address(json.address)
+                _start_datetime(json.start_date)
+                // _end_datetime(json.end_datetime)
+                console.log('Name : ' + name)
+                console.log('lat : ' + lat)
+                console.log('long : ' + long)
+                console.log('radius : ' + radius)
+                console.log('address : ' + address)
+                console.log('start : ' + start_datetime)
+                console.log(json)
+              } else {
+                _status(json.status)
+                _name('')
+                _lat('')
+                _long('')
+                _radius('')
+                _address('')
+                _start_datetime('')
+              }
+            })
+        })
+        .catch(error => {
+          Alert.alert("ERROR " + error)
+        })
+    });
+    return unsubscribe;
+  })
+
+  function sendPlaceData() {
+    // console.log('Press')
+    // console.log('Name = ' + name)
+    if (name && lat && long && radius && address) {
+      // console.log('send data')
+      getToken()
+        .then(data => {
+          fetch('http://192.168.175.50:8000/api/quarantine/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + data
+            },
+            body: JSON.stringify({
+              'name': name,
+              'lat': lat,
+              'long': long,
+              'radius': radius,
+              'address': address,
+            })
+          })
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else {
+                throw res.json()
+              }
+            })
+            .then(json => {
+              if (json.status === 'success') {
+                navigation.navigate('Home')
+              }
               console.log(json)
             })
         })
@@ -71,12 +129,37 @@ export default function QuarantinePlace({ navigation }) {
           Alert.alert("ERROR " + error)
         })
     }
-  })
-
-  const sendPlaceData = () => {
   }
 
-
+  function sendQuit() {
+    getToken()
+      .then(data => {
+        fetch('http://192.168.175.50:8000/api/quarantine/', {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + data
+          }
+        })
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            } else {
+              throw res.json()
+            }
+          })
+          .then(json => {
+            console.log(json)
+            if (json.status === 'success') {
+              navigation.navigate('Home')
+            }
+          })
+      })
+      .catch(error => {
+        Alert.alert("ERROR " + error)
+      })
+  }
   return (
     <KeyboardAvoidingView
       behavior="padding" >
@@ -88,7 +171,7 @@ export default function QuarantinePlace({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Name"
-            onChange={event => _name(event.nativeEvent.target.value)}
+            onChangeText={event => _name(event)}
             editable={!status}
             defaultValue={name}
           />
@@ -97,27 +180,27 @@ export default function QuarantinePlace({ navigation }) {
             style={styles.input}
             placeholder="Latitude"
             keyboardType="numeric"
-            onChange={event => _lat(event.nativeEvent.target.value)}
+            onChangeText={event => _lat(event)}
             editable={!status}
-            defaultValue={lat}
+            defaultValue={String(lat)}
           />
           <Text>Longitude</Text>
           <TextInput
             style={styles.input}
             placeholder="Longtitude"
             keyboardType="numeric"
-            onChange={event => _long(event.nativeEvent.target.value)}
+            onChangeText={event => _long(event)}
             editable={!status}
-            defaultValue={long}
+            defaultValue={String(long)}
           />
           <Text>Radius(meters)</Text>
           <TextInput
             style={styles.input}
             placeholder="radius(meters)"
             keyboardType="number-pad"
-            onChange={event => _radius(event.nativeEvent.target.value)}
+            onChangeText={event => _radius(event)}
             editable={!status}
-            defaultValue={radius}
+            defaultValue={String(radius)}
           />
           <Text>Address</Text>
           <TextInput
@@ -125,15 +208,16 @@ export default function QuarantinePlace({ navigation }) {
             numbersOfLine={4}
             style={styles.input}
             placeholder="Address"
-            onChange={event => _address(event.nativeEvent.target.value)}
+            onChangeText={event => _address(event)}
             editable={!status}
-            defaultValue={address}
+            defaultValue={String(address)}
           />
           {status
             ?
             <View>
-              <Text>Start Datetime : {start_datetime}</Text>
+              <Text>Start Datetime : {String(start_datetime)}</Text>
               <Text>End Datetime : {end_datetime}</Text>
+              <Button title="Quit" onPress={sendQuit} />
             </View>
             : <Button title="Confirm" onPress={sendPlaceData} />
           }
