@@ -34,7 +34,11 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- เปลี่ยน ifFocused เป็น addListener เพื่อให้แต่ละหน้าทำงานแค่ครั้งเดียวเมื่อเปิดหน้านั้นๆ ไม่ให้มีการส่งข้อมูลบ่อย
-- QuarantinePlace
-    - fix bug ใส่ข้อความแล้วลบเอง
-    - เพิ่ม Quit เพื่อส่ง delete
+- ทำ Verify Screen 
+    - verified : เป็นสถานะหลักซึ่งจะแสดงผลว่า Verify ครั้งต่อไปคือเวลาไหน
+    - unverified : เป็นสถานะที่แสดงให้มีการกดปุ่ม verified เพื่อสร้าง history และ สถานะ => verified
+    - inactive : เป็นสถานะที่ต้องติดต่อผู้ดูแลถึงจะสามารถเข้าใช้งานต่อได้
+- มีการส่งอีเมล์ทุกๆ 
+    - 9:00, 12:00, 15:00, 18:00, 20:00
+    - 15 นาทีหลังจากนั้นจะส่งอีเมล์แจ้งเตือนอีกรอบ
+    - 15 นาทีหลังจากส่งอีเมล์แจ้งเตือน จะทำให้เป็นสถานะ inactive แล้วส่งอีเมล์แจ้ง

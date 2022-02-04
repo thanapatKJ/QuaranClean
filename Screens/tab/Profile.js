@@ -33,7 +33,6 @@ export default function Profile({ navigation, props }) {
               'Authorization': 'Token ' + data
             }
           })
-
             .then(res => {
               if (res.ok) {
                 return res.json()

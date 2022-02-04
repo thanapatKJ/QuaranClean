@@ -30,8 +30,8 @@ export default function QuarantinePlace({ navigation }) {
   const [long, _long] = useState('');
   const [radius, _radius] = useState('');
   const [address, _address] = useState('');
-  const [start_datetime, _start_datetime] = useState('');
-  const [end_datetime, _end_datetime] = useState('');
+  const [start_date, _start_date] = useState('');
+  const [end_date, _end_date] = useState('');
 
 
   useEffect(() => {
@@ -62,14 +62,15 @@ export default function QuarantinePlace({ navigation }) {
                 _long(json.long)
                 _radius(json.radius)
                 _address(json.address)
-                _start_datetime(json.start_date)
-                // _end_datetime(json.end_datetime)
+                _start_date(json.start_datetime)
+                _end_date(json.end_datetime)
                 console.log('Name : ' + name)
                 console.log('lat : ' + lat)
                 console.log('long : ' + long)
                 console.log('radius : ' + radius)
                 console.log('address : ' + address)
-                console.log('start : ' + start_datetime)
+                console.log('start : ' + start_date)
+                console.log('end: '+ end_date)
                 console.log(json)
               } else {
                 _status(json.status)
@@ -78,7 +79,7 @@ export default function QuarantinePlace({ navigation }) {
                 _long('')
                 _radius('')
                 _address('')
-                _start_datetime('')
+                _start_date('')
               }
             })
         })
@@ -215,8 +216,8 @@ export default function QuarantinePlace({ navigation }) {
           {status
             ?
             <View>
-              <Text>Start Datetime : {String(start_datetime)}</Text>
-              <Text>End Datetime : {end_datetime}</Text>
+              <Text>Start Datetime : {String(start_date)}</Text>
+              <Text>End Datetime : {end_date}</Text>
               <Button title="Quit" onPress={sendQuit} />
             </View>
             : <Button title="Confirm" onPress={sendPlaceData} />
@@ -249,4 +250,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black'
   },
+  
 });

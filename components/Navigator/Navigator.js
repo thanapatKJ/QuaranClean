@@ -4,6 +4,7 @@ import { View } from 'react-native';
 // Front Page
 import Register from '../../Screens/frontpage/Register';
 import Login from '../../Screens/frontpage/Login';
+// import Login from '../../Screens/frontpage/Login_copy';
 // import Landing from '../../Screens/frontpage/Landing';
 
 // Tab
@@ -69,6 +70,7 @@ function AppTab() {
         </Tab.Navigator>
     )
 }
+
 export default function Navigator() {
     const globalContext = useContext(Context)
     const { isLoggedIn, userObj } = globalContext;

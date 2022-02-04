@@ -12,12 +12,13 @@ import { Context } from "../../components/globalContext/globalContext";
 export default function Login({ navigation, route, props }) {
   const globalContext = useContext(Context)
   const {
-    setIsLoggedIn,
-    setUserObj,
+    isLoggedIn, setIsLoggedIn,
+    userObj, setUserObj,
     setToken, getToken } = globalContext;
 
   const [idcard, _idcard] = useState();
   const [password, _password] = useState("");
+  const [result, _result] = useState();
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -59,7 +60,6 @@ export default function Login({ navigation, route, props }) {
   })
 
   function sendLoginData() {
-    console.log('sendLoginData')
     setError("")
     let body = JSON.stringify({
       'username': idcard,
@@ -77,7 +77,6 @@ export default function Login({ navigation, route, props }) {
         if (res.ok) {
           return res.json()
         } else {
-          console.log('not ok')
           setError("Invalid Credentials")
           throw res.json()
         }
@@ -105,7 +104,6 @@ export default function Login({ navigation, route, props }) {
       <View style={styles.text1Column}>
         <Text style={styles.text1}>Welcome to QuaranClean</Text>
         <View style={styles.rect1}></View>
-        <Text style={styles.e}>{error}</Text>
         <View style={styles.username2}>
           <EvilIconsIcon name="user" style={styles.icon3}></EvilIconsIcon>
           <TextInput
@@ -148,10 +146,6 @@ export default function Login({ navigation, route, props }) {
 }
 
 const styles = StyleSheet.create({
-  e: {
-    color: "rgba(255,0,0,1)",
-    marginTop: 30,
-  },
   container: {
     flex: 1,
     backgroundColor: "rgba(0,0,139,1)"
@@ -170,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(251,247,247,1)",
     borderRadius: 5,
     flexDirection: "row",
-    // marginTop: 40,
+    marginTop: 40,
   },
   icon3: {
     color: "rgba(74,74,74,1)",
