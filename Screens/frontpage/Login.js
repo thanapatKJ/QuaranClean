@@ -13,7 +13,7 @@ export default function Login({ navigation, route, props }) {
   const globalContext = useContext(Context)
   const {
     setIsLoggedIn,
-    setUserObj,
+    setUserObj, domain,
     setToken, getToken } = globalContext;
 
   const [idcard, _idcard] = useState();
@@ -25,7 +25,7 @@ export default function Login({ navigation, route, props }) {
       console.log('Login Screen')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/check/', {
+          fetch(domain+'check/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -65,7 +65,7 @@ export default function Login({ navigation, route, props }) {
       'username': idcard,
       'password': password
     })
-    fetch('http://192.168.175.50:8000/api/login/', {
+    fetch(domain+'login/', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

@@ -4,27 +4,21 @@ import {
   View,
   Button,
   KeyboardAvoidingView,
-  SafeAreaView,
   Text,
   Alert,
   TextInput,
   ScrollView,
 } from 'react-native';
 import Header from '../../components/Header';
-import { useIsFocused } from '@react-navigation/native';
 import { Context } from '../../components/globalContext/globalContext';
 
 
 export default function QuarantinePlace({ navigation }) {
   const globalContext = useContext(Context)
-  const {
-    isLoggedIn, setIsLoggedIn,
-    userObj, setUserObj,
-    setToken, getToken,
-    removeToken } = globalContext;
+  const { domain, getToken } = globalContext;
 
-  const isFocused = useIsFocused();
   const [status, _status] = useState();
+  const [canQuit, _canQuit] = useState();
   const [name, _name] = useState('');
   const [lat, _lat] = useState('');
   const [long, _long] = useState('');
@@ -39,7 +33,7 @@ export default function QuarantinePlace({ navigation }) {
       console.log('QuaranPlace Screen')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/quarantine/', {
+          fetch(domain + 'quarantine/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -70,7 +64,7 @@ export default function QuarantinePlace({ navigation }) {
                 console.log('radius : ' + radius)
                 console.log('address : ' + address)
                 console.log('start : ' + start_date)
-                console.log('end: '+ end_date)
+                console.log('end: ' + end_date)
                 console.log(json)
               } else {
                 _status(json.status)
@@ -82,6 +76,28 @@ export default function QuarantinePlace({ navigation }) {
                 _start_date('')
               }
             })
+          fetch(domain + 'verify/', {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + data
+            },
+          })
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else {
+                throw res.json()
+              }
+            })
+            .then(json => {
+              if (json.status === 'inactive' || json.status === "unverified") {
+                _canQuit(false)
+              } else {
+                _canQuit(true)
+              }
+            })
         })
         .catch(error => {
           Alert.alert("ERROR " + error)
@@ -91,13 +107,10 @@ export default function QuarantinePlace({ navigation }) {
   })
 
   function sendPlaceData() {
-    // console.log('Press')
-    // console.log('Name = ' + name)
     if (name && lat && long && radius && address) {
-      // console.log('send data')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/quarantine/', {
+          fetch(domain + 'quarantine/', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -135,7 +148,7 @@ export default function QuarantinePlace({ navigation }) {
   function sendQuit() {
     getToken()
       .then(data => {
-        fetch('http://192.168.175.50:8000/api/quarantine/', {
+        fetch(domain + 'quarantine/', {
           method: 'DELETE',
           headers: {
             'Accept': 'application/json',
@@ -214,17 +227,24 @@ export default function QuarantinePlace({ navigation }) {
             defaultValue={String(address)}
           />
           {status
-            ?
-            <View>
-              <Text>Start Datetime : {String(start_date)}</Text>
-              <Text>End Datetime : {end_date}</Text>
-              <Button title="Quit" onPress={sendQuit} />
-            </View>
+            ? <>
+              <View>
+                <Text>Start Datetime : {String(start_date)}</Text>
+                <Text>End Datetime : {end_date}</Text>
+              </View>
+              {canQuit
+                ?
+                <View>
+                  <Button title="Quit" onPress={sendQuit} />
+                </View>
+                : <></>
+
+              }</>
             : <Button title="Confirm" onPress={sendPlaceData} />
           }
         </ScrollView>
-      </View>
-    </KeyboardAvoidingView>
+      </View >
+    </KeyboardAvoidingView >
   );
 }
 
@@ -250,5 +270,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black'
   },
-  
+
 });

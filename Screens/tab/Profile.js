@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
-import { useIsFocused } from '@react-navigation/native';
 
 export default function Profile({ navigation, props }) {
   const globalContext = useContext(Context)
   const {
-    isLoggedIn, setIsLoggedIn,
-    userObj, setUserObj,
-    setToken, getToken,
+    setIsLoggedIn, domain,
+    setUserObj,
+    getToken,
     removeToken } = globalContext;
-  const isFocused = useIsFocused();
 
   const [name, _name] = useState('');
   const [lastname, _lastname] = useState('');
@@ -25,7 +23,7 @@ export default function Profile({ navigation, props }) {
       console.log('Profile Screen')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/profile/', {
+          fetch(domain+'profile/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -60,7 +58,7 @@ export default function Profile({ navigation, props }) {
       getToken()
         .then(data => {
           console.log('getToken Data ' + data)
-          fetch('http://192.168.175.50:8000/api/logout/', {
+          fetch(domain+'logout/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',

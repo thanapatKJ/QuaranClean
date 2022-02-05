@@ -3,12 +3,9 @@ import {
   StyleSheet,
   View,
   Button,
-  KeyboardAvoidingView,
   SafeAreaView,
   Text,
   Alert,
-  TextInput,
-  ScrollView,
 } from 'react-native'; import { fonts } from 'react-native-elements/dist/config';
 import Header from '../../components/Header';
 
@@ -17,7 +14,7 @@ import { _LogBoxInspectorContainer } from 'react-native/Libraries/LogBox/LogBoxI
 
 export default function Verify({ navigation }) {
   const globalContext = useContext(Context)
-  const { getToken } = globalContext;
+  const { getToken ,domain} = globalContext;
 
   const [verified, _verified] = useState();
   const [unverified, _unverified] = useState();
@@ -31,7 +28,7 @@ export default function Verify({ navigation }) {
       console.log('Verify Screen')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/verify/', {
+          fetch(domain+'verify/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -45,6 +42,7 @@ export default function Verify({ navigation }) {
               } else {
                 throw res.json()
               }
+              
             })
             .then(json => {
               _next_time('')
@@ -91,7 +89,7 @@ export default function Verify({ navigation }) {
     console.log('sendVerify')
     getToken()
       .then(data => {
-        fetch('http://192.168.175.50:8000/api/verify/', {
+        fetch(domain+'verify/', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',

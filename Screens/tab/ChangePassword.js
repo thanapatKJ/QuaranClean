@@ -5,9 +5,9 @@ import { Context } from '../../components/globalContext/globalContext';
 export default function ChangePassword({ navigation }) {
   const globalContext = useContext(Context)
   const {
-    isLoggedIn, setIsLoggedIn,
-    userObj, setUserObj,
-    setToken, getToken,
+    setIsLoggedIn,
+    setUserObj,
+    getToken,domain,
     removeToken } = globalContext;
 
   const [opassword, _opassword] = useState('');
@@ -18,7 +18,7 @@ export default function ChangePassword({ navigation }) {
     if (npassword === cpassword && (opassword && npassword && cpassword)) {
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/profile/', {
+          fetch(domain+'profile/', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',

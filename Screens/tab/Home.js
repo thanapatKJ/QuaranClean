@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, TouchableOpacity, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
-import { useIsFocused } from '@react-navigation/native';
-
 // import Map from '../../components/Maps_test';
 import Map from '../../components/Maps';
 
@@ -19,13 +17,12 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
   const globalContext = useContext(Context)
-  const {
-    isLoggedIn, setIsLoggedIn,
-    userObj, setUserObj,
-    setToken, getToken,
-    removeToken } = globalContext;
-  const isFocused = useIsFocused();
+  const { domain, getToken } = globalContext;
   const [status, _status] = useState();
+  const [lat, _lat] = useState();
+  const [long, _long] = useState();
+  const [radius, _radius] = useState();
+
 
 
   useEffect(() => {
@@ -33,7 +30,7 @@ export default function Home({ navigation }) {
       console.log('Home Screen')
       getToken()
         .then(data => {
-          fetch('http://192.168.175.50:8000/api/quarantine/', {
+          fetch(domain + 'quarantine/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -50,6 +47,13 @@ export default function Home({ navigation }) {
               }
             })
             .then(json => {
+              console.log(json)
+              if (json.status) {
+                console.log('status eng')
+                _lat(json.lat)
+                _long(json.long)
+                _radius(json.radius)
+              }
               _status(json.status)
             })
         })
@@ -76,13 +80,13 @@ export default function Home({ navigation }) {
           }}
         >
           {status
-            ?
+            ?<>
             <Circle
               center={{
-                latitude: LATITUDE,
-                longitude: LONGITUDE,
-              }} radius={10} fillColor={'rgba(200,300,200,0.5)'}
-            />
+                latitude: lat,
+                longitude: long,
+              }} radius={radius} fillColor={'rgba(200,300,200,0.5)'}
+            /></>
             : <></>
           }
         </MapView>
