@@ -37,10 +37,13 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - Location
 "react-native-location": "^2.5.0",
 
+- Boundary
+"react-native-boundary": "^1.1.1",
+
 Descriptions
 - สามารถ Run Application บนมือถือได้
 - Package install
-    - npm i @supersami/rn-foreground-service
-    
-    - npm install --save react-native-location
-    - react-native link react-native-location
+    - npm install react-native-boundary --save
+
+- ย้าย status, name, lat, long, radius ไปเก็บไว้ใน asyncstorage เพื่อเรียกใข้ผ่าน foreground service ทีหลัง
+    - สร้าง status, Location สำหรับเก็บไว้ใน asyncstorage ซึ่งจะ refresh ทุกครั้งที่เข้าไปที่หน้า home

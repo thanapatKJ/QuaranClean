@@ -38,8 +38,69 @@ const Provider = ({ children }) => {
         } catch (error) {
             console.log(error)
         }
-        // console.log('Remove Token from @token storage')
     }
+    
+    const setStatus = async (status) => {
+        try {
+            await AsyncStorage.setItem('@status', String(status))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getStatus = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@status')
+            // console.log('inside value '+value)
+            if (value !== null && value!=='false') {
+                // console.log('!====')
+                return true
+            }
+            else{
+                // console.log('=====')
+                return false
+            }
+        } catch (error) {
+            console.log('something happen')
+            console.log(error)
+        }
+    }
+    const removeStatus = async () => {
+        try {
+            await AsyncStorage.removeItem('@status')
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
+
+    const setLocation = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@location', jsonValue)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const getLocation = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@location')
+            if (value !== null) {
+                // console.log('get Token '+value)
+                return JSON.parse(value)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const removeLocation = async () => {
+        try {
+            await AsyncStorage.removeItem('@location')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     const globalContext = {
         domain,
@@ -53,7 +114,9 @@ const Provider = ({ children }) => {
         name, _name,
         lat, _lat,
         long, _long,
-        radius, _radius
+        radius, _radius,
+        getStatus, setStatus, removeStatus,
+        getLocation, setLocation, removeLocation,
     }
     return <Context.Provider value={globalContext}>{children}</Context.Provider>
 }

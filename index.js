@@ -8,12 +8,12 @@ import { PermissionsAndroid } from 'react-native';
 
 // Register the service
 ReactNativeForegroundService.register();
-// Start Notification
-ReactNativeForegroundService.start({
-    id: 144,
-    title: "QuaranClean",
-    message: "Using GPS Location.",
-});
+// // Start Notification
+// ReactNativeForegroundService.start({
+//     id: 144,
+//     title: "QuaranClean",
+//     message: "Using GPS Location.",
+// });
 
 
 // PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_ฺBACKGROUND_LOCATION).then(response => {

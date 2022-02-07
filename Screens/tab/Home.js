@@ -22,13 +22,13 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 export default function Home({ navigation }) {
   const globalContext = useContext(Context)
   const { domain, getToken,
-    name, _name,
     lat, _lat,
     long, _long,
     radius, _radius,
-    status, _status } = globalContext;
-
-  const [location, setLocation] = useState(null);
+    status, _status,
+    name, _name,
+    getLocation, setLocation, removeLocation,
+    getStatus, setStatus, removeStatus } = globalContext;
 
   // RNLocation.configure({
   //   distanceFilter: 5, // Meters
@@ -84,9 +84,25 @@ export default function Home({ navigation }) {
                 _long(json.long)
                 _radius(json.radius)
                 _name(json.name)
+                removeLocation().then()
+                setLocation(json)
               }
-              _status(json.status)
-              
+              // console.log('home json status '+json.status)
+              if (removeStatus()) {
+                console.log('removeStatus')
+                
+                setStatus(json.status)
+                
+                // getStatus().then(data=>{
+                  // console.log('status after remove ')+ data})
+                _status(json.status)
+                
+                if(json.status){
+                  getLocation().then(data=>{
+                    console.log('location home '+data['name'])
+                  })
+                }
+              }
             })
         })
         .catch(error => {

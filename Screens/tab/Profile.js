@@ -25,7 +25,7 @@ export default function Profile({ navigation, props }) {
       console.log('Profile Screen')
       getToken()
         .then(data => {
-          fetch(domain+'profile/', {
+          fetch(domain + 'profile/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -61,7 +61,7 @@ export default function Profile({ navigation, props }) {
       getToken()
         .then(data => {
           console.log('getToken Data ' + data)
-          fetch(domain+'logout/', {
+          fetch(domain + 'logout/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -73,6 +73,9 @@ export default function Profile({ navigation, props }) {
           removeToken()
           setUserObj('')
           setIsLoggedIn(false)
+          // if (ReactNativeForegroundService.is_task_running('taskid')) {
+          ReactNativeForegroundService.remove_task('taskid');
+          // }
           ReactNativeForegroundService.stop();
           navigation.replace('Login')
         })

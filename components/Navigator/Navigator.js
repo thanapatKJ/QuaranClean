@@ -25,6 +25,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // globalContext
 import { Context, Provider } from '../globalContext/globalContext';
 
+// task
+import RootScreen from '../task/RootScreen';
+
 const navOptionHandler = () => ({
     headerShown: false
 })
@@ -44,30 +47,33 @@ function ProfileNavigator() {
 const Tab = createBottomTabNavigator();
 function AppTab() {
     return (
-        <Tab.Navigator
-            initialRouteName="Home"
-            backBehavior="none"
-            tabBarOptions={{
-                keyboardHidesTabBar: true
-            }}
-        >
-            <Tab.Screen name="Home" component={Home} options={{
-                tabBarLabel: 'Home',
-                tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="human-greeting" color={color} size={size} />),
-            }} />
-            <Tab.Screen name="Place" component={QuarantinePlace} options={{
-                tabBarLabel: 'Place',
-                tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="hospital-building" color={color} size={size} />),
-            }} />
-            <Tab.Screen name="Verify" component={Verify} options={{
-                tabBarLabel: 'Verify',
-                tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="alarm-check" color={color} size={size} />),
-            }} />
-            <Tab.Screen name="Profile" component={ProfileNavigator} options={{
-                tabBarLabel: 'Profile',
-                tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="clipboard-text-multiple-outline" color={color} size={size} />),
-            }} />
-        </Tab.Navigator>
+        <>
+            <RootScreen />
+            <Tab.Navigator
+                initialRouteName="Home"
+                backBehavior="none"
+                tabBarOptions={{
+                    keyboardHidesTabBar: true
+                }}
+            >
+                <Tab.Screen name="Home" component={Home} options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="human-greeting" color={color} size={size} />),
+                }} />
+                <Tab.Screen name="Place" component={QuarantinePlace} options={{
+                    tabBarLabel: 'Place',
+                    tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="hospital-building" color={color} size={size} />),
+                }} />
+                <Tab.Screen name="Verify" component={Verify} options={{
+                    tabBarLabel: 'Verify',
+                    tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="alarm-check" color={color} size={size} />),
+                }} />
+                <Tab.Screen name="Profile" component={ProfileNavigator} options={{
+                    tabBarLabel: 'Profile',
+                    tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="clipboard-text-multiple-outline" color={color} size={size} />),
+                }} />
+            </Tab.Navigator>
+        </>
     )
 }
 
