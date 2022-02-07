@@ -7,11 +7,15 @@ import Map from '../../components/Maps';
 
 import MapView, { PROVIDER_GOOGLE, Marker, ProviderPropType, Circle } from 'react-native-maps';
 
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
+
+import RNLocation from 'react-native-location';
+
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 13.72791061004847;
-const LONGITUDE = 100.55003259290271;
+const LATITUDE = 13.7279279;
+const LONGITUDE = 100.5497879;
 const LATITUDE_DELTA = 0.0009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -23,11 +27,36 @@ export default function Home({ navigation }) {
   const [long, _long] = useState();
   const [radius, _radius] = useState();
 
+  const [location, setLocation] = useState(null);
 
+  // RNLocation.configure({
+  //   distanceFilter: 5, // Meters
+  //   desiredAccuracy: {
+  //     ios: "bestForNavigation",
+  //     android: "highAccuracy"
+  //   },
+  //   // Android only
+  //   androidProvider: "auto",
+  //   interval: 5000, // Milliseconds
+  //   fastestInterval: 1000, // Milliseconds
+  //   maxWaitTime: 5000, // Milliseconds
+  // })
+  // RNLocation.requestPermission({
+  //   android: {
+  //     detail: "fine",
+  //     rationale: {
+  //       title: "We need to access your location",
+  //       message: "We use your location to show where you are on the map",
+  //       buttonPositive: "OK",
+  //       buttonNegative: "Cancel"
+  //     }
+  //   }
+  // })
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Home Screen')
+
       getToken()
         .then(data => {
           fetch(domain + 'quarantine/', {
@@ -47,9 +76,9 @@ export default function Home({ navigation }) {
               }
             })
             .then(json => {
-              console.log(json)
+              // console.log(json)
               if (json.status) {
-                console.log('status eng')
+                // console.log('status eng')
                 _lat(json.lat)
                 _long(json.long)
                 _radius(json.radius)
@@ -69,7 +98,6 @@ export default function Home({ navigation }) {
       <View style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
-          // ref={map => this._map = map}
           showsUserLocation={true}
           style={styles.map}
           initialRegion={{
@@ -78,15 +106,19 @@ export default function Home({ navigation }) {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
+          // initialRegion={onUserLocationChange}
+          // onUser
+        // ref = {(mapView) => {mapView}}
+
         >
           {status
-            ?<>
-            <Circle
-              center={{
-                latitude: lat,
-                longitude: long,
-              }} radius={radius} fillColor={'rgba(200,300,200,0.5)'}
-            /></>
+            ? <>
+              <Circle
+                center={{
+                  latitude: lat,
+                  longitude: long,
+                }} radius={radius} fillColor={'rgba(200,300,200,0.5)'}
+              /></>
             : <></>
           }
         </MapView>

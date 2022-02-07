@@ -3,6 +3,8 @@ import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from '
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
 
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
+
 export default function Profile({ navigation, props }) {
   const globalContext = useContext(Context)
   const {
@@ -53,6 +55,7 @@ export default function Profile({ navigation, props }) {
     })
     return unsubscribe;
   })
+
   function logout() {
     try {
       getToken()
@@ -70,6 +73,7 @@ export default function Profile({ navigation, props }) {
           removeToken()
           setUserObj('')
           setIsLoggedIn(false)
+          ReactNativeForegroundService.stop();
           navigation.replace('Login')
         })
     } catch (error) {

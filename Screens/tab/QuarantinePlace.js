@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
+import { PermissionsAndroid } from 'react-native';
 
 
 export default function QuarantinePlace({ navigation }) {
@@ -29,6 +30,20 @@ export default function QuarantinePlace({ navigation }) {
 
 
   useEffect(() => {
+    PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+      {
+        title: 'Background Location Permission',
+        message:
+          'We need access to your location ' +
+          'so you can get live quality updates.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      })
+    // PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_ฺBACKGROUND_LOCATION).then(response => {
+    //   console.log(response)
+    // })
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('QuaranPlace Screen')
       getToken()

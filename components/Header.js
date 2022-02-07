@@ -1,7 +1,6 @@
 import React from 'react'
 import {Dimensions, StyleSheet, View, Text } from 'react-native';
 
-
 const { width, height } = Dimensions.get('window');
 const Header = () => {
     return (

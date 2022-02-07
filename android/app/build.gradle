@@ -208,6 +208,11 @@ dependencies {
         exclude group:'com.facebook.flipper'
     }
 
+    // RN location
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
+    // RN location
+
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")

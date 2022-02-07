@@ -17,7 +17,7 @@ Openjdk RE 18.9 b11.0.2+9
 "@react-navigation/native": "^5.9.8",
 "@react-navigation/stack": "^5.14.9",
 
-    - Here
+- Here
 npm install @react-navigation/native@^5.x
 npm install @react-native-reanimated@2.2.4
 npm install  react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
@@ -31,14 +31,16 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - AsyncStorage
 "@react-native-async-storage/async-storage": "^1.15.17",
 
+- Foreground-service
+"@supersami/rn-foreground-service": "^1.1.1",
+
+- Location
+"react-native-location": "^2.5.0",
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- ทำ Verify Screen 
-    - verified : เป็นสถานะหลักซึ่งจะแสดงผลว่า Verify ครั้งต่อไปคือเวลาไหน
-    - unverified : เป็นสถานะที่แสดงให้มีการกดปุ่ม verified เพื่อสร้าง history และ สถานะ => verified
-    - inactive : เป็นสถานะที่ต้องติดต่อผู้ดูแลถึงจะสามารถเข้าใช้งานต่อได้
-- มีการส่งอีเมล์ทุกๆ 
-    - 9:00, 12:00, 15:00, 18:00, 20:00
-    - 15 นาทีหลังจากนั้นจะส่งอีเมล์แจ้งเตือนอีกรอบ
-    - 15 นาทีหลังจากส่งอีเมล์แจ้งเตือน จะทำให้เป็นสถานะ inactive แล้วส่งอีเมล์แจ้ง
+- Package install
+    - npm i @supersami/rn-foreground-service
+    
+    - npm install --save react-native-location
+    - react-native link react-native-location
