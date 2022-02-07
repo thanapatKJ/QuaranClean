@@ -16,14 +16,18 @@ import { PermissionsAndroid } from 'react-native';
 
 export default function QuarantinePlace({ navigation }) {
   const globalContext = useContext(Context)
-  const { domain, getToken } = globalContext;
-
-  const [status, _status] = useState();
+  const { domain, getToken,
+    name, _name,
+    lat, _lat,
+    long, _long,
+    radius, _radius,
+    status, _status } = globalContext;
+  // const [status, _status] = useState();
   const [canQuit, _canQuit] = useState();
-  const [name, _name] = useState('');
-  const [lat, _lat] = useState('');
-  const [long, _long] = useState('');
-  const [radius, _radius] = useState('');
+  // const [name, _name] = useState('');
+  // const [lat, _lat] = useState('');
+  // const [long, _long] = useState('');
+  // const [radius, _radius] = useState('');
   const [address, _address] = useState('');
   const [start_date, _start_date] = useState('');
   const [end_date, _end_date] = useState('');

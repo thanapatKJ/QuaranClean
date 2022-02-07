@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text } from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
+import { Context } from '../globalContext/globalContext';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
@@ -21,6 +22,13 @@ let locationSubscription = null;
 let locationTimeout = null;
 
 export default function RootScreen() {
+    const globalContext = useContext(Context)
+    const { domain, getToken,
+        name, _name,
+        lat, _lat,
+        long, _long,
+        radius, _radius,
+        status, _status } = globalContext;
     console.log('root')
     // request the permission before starting the service.
     useEffect(() => {
@@ -45,7 +53,7 @@ export default function RootScreen() {
         if (PermissionsAndroid.RESULTS.GRANTED) {
             //do your thing!
             // console.log(PermissionsAndroid.RESULTS.GRANTED)
-            // console.log('GRANTED')
+            console.log('GRANTED')
 
             ReactNativeForegroundService.add_task(
                 () => {
@@ -59,7 +67,7 @@ export default function RootScreen() {
                         if (granted) {
                             locationSubscription = RNLocation.subscribeToLocationUpdates(
                                 ([locations]) => {
-                                    console.log('suv')
+                                    console.log('subscrive location')
                                     locationSubscription();
                                     // locationTimeout && clearTimeout(locationTimeout);
                                     console.log(locations);
@@ -68,10 +76,13 @@ export default function RootScreen() {
                         }
                         else {
                             locationSubscription && locationSubscription();
-                            locationTimeout && clearTimeout(locationTimeout);
+                            // locationTimeout && clearTimeout(locationTimeout);
                             console.log('no permissions to obtain location');
                         }
                     });
+                    if (status) {
+                        console.log('quarantine on')
+                    }
                 },
                 {
                     delay: 1000,

@@ -7,6 +7,11 @@ const Provider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(true)
     const [userObj, setUserObj] = useState()
     const [appSettings, setAppSettings] = useState({})
+    const [name, _name] = useState()
+    const [lat, _lat] = useState()
+    const [long, _long] = useState()
+    const [radius, _radius] = useState()
+    const [status, _status] = useState()
 
     const setToken = async (token) => {
         try {
@@ -38,15 +43,17 @@ const Provider = ({ children }) => {
 
     const globalContext = {
         domain,
-        isLoggedIn,
-        setIsLoggedIn,
-        appSettings,
-        setAppSettings,
-        userObj,
-        setUserObj,
+        isLoggedIn, setIsLoggedIn,
+        appSettings, setAppSettings,
+        userObj, setUserObj,
         setToken,
         getToken,
-        removeToken
+        removeToken,
+        status, _status,
+        name, _name,
+        lat, _lat,
+        long, _long,
+        radius, _radius
     }
     return <Context.Provider value={globalContext}>{children}</Context.Provider>
 }

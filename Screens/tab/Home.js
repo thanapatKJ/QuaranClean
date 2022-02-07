@@ -21,11 +21,12 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
   const globalContext = useContext(Context)
-  const { domain, getToken } = globalContext;
-  const [status, _status] = useState();
-  const [lat, _lat] = useState();
-  const [long, _long] = useState();
-  const [radius, _radius] = useState();
+  const { domain, getToken,
+    name, _name,
+    lat, _lat,
+    long, _long,
+    radius, _radius,
+    status, _status } = globalContext;
 
   const [location, setLocation] = useState(null);
 
@@ -82,8 +83,10 @@ export default function Home({ navigation }) {
                 _lat(json.lat)
                 _long(json.long)
                 _radius(json.radius)
+                _name(json.name)
               }
               _status(json.status)
+              
             })
         })
         .catch(error => {
@@ -106,8 +109,8 @@ export default function Home({ navigation }) {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
-          // initialRegion={onUserLocationChange}
-          // onUser
+        // initialRegion={onUserLocationChange}
+        // onUser
         // ref = {(mapView) => {mapView}}
 
         >
