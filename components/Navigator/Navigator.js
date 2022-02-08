@@ -26,7 +26,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { Context, Provider } from '../globalContext/globalContext';
 
 // task
-import RootScreen from '../task/RootScreen';
+// import RootScreen from '../task/RootScreen';
 
 const navOptionHandler = () => ({
     headerShown: false
@@ -48,7 +48,6 @@ const Tab = createBottomTabNavigator();
 function AppTab() {
     return (
         <>
-            <RootScreen />
             <Tab.Navigator
                 initialRouteName="Home"
                 backBehavior="none"

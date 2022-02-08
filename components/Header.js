@@ -1,17 +1,22 @@
 import React from 'react'
-import {Dimensions, StyleSheet, View, Text } from 'react-native';
+import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import RootScreen from './task/RootScreen';
 
 const { width, height } = Dimensions.get('window');
+
 const Header = () => {
     return (
-        <View style={styles.header}>
-            <Text style={styles.text}>QuaranClean</Text>
-        </View>
+        <>
+            <RootScreen />
+            <View style={styles.header}>
+                <Text style={styles.text}>QuaranClean</Text>
+            </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
-    header:{
+    header: {
         height: 60,
         // height: '8.198%',
         paddingTop: 12,

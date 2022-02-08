@@ -3,17 +3,16 @@ import { View, Text } from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
-import { Context } from '../globalContext/globalContext';
+import { Context, Provider } from '../globalContext/globalContext';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
 RNLocation.configure({
-    distanceFilter: 5, // Meters
+    distanceFilter: 10, // Meters
     desiredAccuracy: {
         android: 'highAccuracy',
     },
-    // Android only
-    androidProvider: 'auto',
+    androidProvider: 'playServices',
     interval: 5000, // Milliseconds
     fastestInterval: 1000, // Milliseconds
     maxWaitTime: 5000, // Milliseconds
@@ -26,16 +25,42 @@ export default function RootScreen() {
     const { domain, getToken,
         getLocation, setLocation, removeLocation,
         getStatus, setStatus, removeStatus } = globalContext;
-        
+
     useEffect(() => {
         onStart()
+        // check()
     }, [])
+
+    const check = () => {
+        console.log('check rootscreen')
+        getToken().then(data => {
+            fetch(domain + 'check/', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Token ' + data
+                }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    } else {
+                        throw res.json()
+                    }
+                })
+                .then(json => {
+                    console.log(json)
+                })
+        })
+    }
 
     // Checking if the task i am going to create already exist and running, which means that the foreground is also running.
     const onStart = () => {
         console.log('onStart')
         if (ReactNativeForegroundService.is_task_running('taskid')) return;
         // Creating a task.
+        console.log('add task taskid')
         ReactNativeForegroundService.add_task(
             () => {
                 RNLocation.requestPermission({
@@ -43,27 +68,17 @@ export default function RootScreen() {
                         detail: 'fine',
                     },
                 }).then((granted) => {
-                    // console.log('Location Permissions: ', granted);
                     // if has permissions try to obtain location with RN location
                     if (granted) {
                         locationSubscription = RNLocation.subscribeToLocationUpdates(
                             ([locations]) => {
-                                // console.log('subscribe location')
-                                // locationTimeout && clearTimeout(locationTimeout);
-                                // console.log(locations);
-                                // getStatus().then(data =>{
-                                //     console.log('root status get '+data)
-                                // })
-                                // getToken().then(data => {
-                                //     console.log('root token get '+data)
-                                // })
+                                console.log(locations);
                                 locationSubscription();
                             },
                         );
                     }
                     else {
                         locationSubscription && locationSubscription();
-                        // locationTimeout && clearTimeout(locationTimeout);
                         console.log('no permissions to obtain location');
                     }
                 });

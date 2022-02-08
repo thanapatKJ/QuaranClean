@@ -70,13 +70,19 @@ export default function Profile({ navigation, props }) {
             }
           })
           console.log('Token ' + data)
+          // console.log(ReactNativeForegroundService.get_all_tasks());
+          // ReactNativeForegroundService.remove_all_tasks();
+          ReactNativeForegroundService.stop('taskid');
+          ReactNativeForegroundService.remove_all_tasks();
+          console.log(ReactNativeForegroundService.get_all_tasks());
+
           removeToken()
           setUserObj('')
           setIsLoggedIn(false)
           // if (ReactNativeForegroundService.is_task_running('taskid')) {
-          ReactNativeForegroundService.remove_task('taskid');
+          //   console.log('remove_task')
+          //   ReactNativeForegroundService.remove_task('taskid');
           // }
-          ReactNativeForegroundService.stop();
           navigation.replace('Login')
         })
     } catch (error) {

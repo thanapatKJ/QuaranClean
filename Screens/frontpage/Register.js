@@ -1,8 +1,14 @@
-import React, { Component, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
+import { Context } from "../../components/globalContext/globalContext";
 
 
 export default function Register({ navigation }) {
+  const globalContext = useContext(Context)
+  const {
+    setIsLoggedIn,
+    setUserObj, domain,
+    setToken, getToken } = globalContext;
   const [name, _name] = useState('');
   const [lastname, _lastname] = useState('');
   const [idcard, _idcard] = useState('');
@@ -30,7 +36,7 @@ export default function Register({ navigation }) {
           'numbers': numbers
         })
       }
-      fetch('http://192.168.175.50:8000/api/register/', post_data)
+      fetch(domain + 'register/', post_data)
         .then(response => response.json())
         .then(data => { console.log(data) })
         // .then({ navigate('Login')} )

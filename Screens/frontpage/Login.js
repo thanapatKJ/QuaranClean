@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Context } from "../../components/globalContext/globalContext";
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
 export default function Login({ navigation, route, props }) {
   const globalContext = useContext(Context)
@@ -22,10 +23,14 @@ export default function Login({ navigation, route, props }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      
       console.log('Login Screen')
+      console.log(ReactNativeForegroundService.is_running());
+
       getToken()
         .then(data => {
-          fetch(domain+'check/', {
+          // console.log('token : ' + data)
+          fetch(domain + 'check/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -54,6 +59,7 @@ export default function Login({ navigation, route, props }) {
         .catch(error => {
           console.log("ERROR " + error)
         })
+
     })
     return unsubscribe;
   })
@@ -65,7 +71,7 @@ export default function Login({ navigation, route, props }) {
       'username': idcard,
       'password': password
     })
-    fetch(domain+'login/', {
+    fetch(domain + 'login/', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

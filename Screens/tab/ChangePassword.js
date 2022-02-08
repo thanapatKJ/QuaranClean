@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput, TextComponent } from 'react-native';
 import { Context } from '../../components/globalContext/globalContext';
 
+import Header from '../../components/Header';
+
 export default function ChangePassword({ navigation }) {
   const globalContext = useContext(Context)
   const {
     setIsLoggedIn,
     setUserObj,
-    getToken,domain,
+    getToken, domain,
     removeToken } = globalContext;
 
   const [opassword, _opassword] = useState('');
@@ -18,7 +20,7 @@ export default function ChangePassword({ navigation }) {
     if (npassword === cpassword && (opassword && npassword && cpassword)) {
       getToken()
         .then(data => {
-          fetch(domain+'profile/', {
+          fetch(domain + 'profile/', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -57,23 +59,26 @@ export default function ChangePassword({ navigation }) {
   }
   return (
     <View>
-      <Text style={styles.title}>ChangePassword</Text>
-      <TextInput style={styles.input}
-        placeholder="Old Password"
-        secureTextEntry={true}
-        onChangeText={opassword => _opassword(opassword)}
-      />
-      <TextInput style={styles.input}
-        placeholder="New Password"
-        secureTextEntry={true}
-        onChangeText={npassword => _npassword(npassword)}
-      />
-      <TextInput style={styles.input}
-        placeholder="Confirm New Password"
-        secureTextEntry={true}
-        onChangeText={cpassword => _cpassword(cpassword)}
-      />
-      <Button title="Confirm" onPress={sendChangePassword} />
+      <Header />
+      <View>
+        <Text style={styles.title}>ChangePassword</Text>
+        <TextInput style={styles.input}
+          placeholder="Old Password"
+          secureTextEntry={true}
+          onChangeText={opassword => _opassword(opassword)}
+        />
+        <TextInput style={styles.input}
+          placeholder="New Password"
+          secureTextEntry={true}
+          onChangeText={npassword => _npassword(npassword)}
+        />
+        <TextInput style={styles.input}
+          placeholder="Confirm New Password"
+          secureTextEntry={true}
+          onChangeText={cpassword => _cpassword(cpassword)}
+        />
+        <Button title="Confirm" onPress={sendChangePassword} />
+      </View>
     </View>
   );
 }

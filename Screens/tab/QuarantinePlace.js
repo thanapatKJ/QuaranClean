@@ -42,9 +42,6 @@ export default function QuarantinePlace({ navigation }) {
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
       })
-    // PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_ฺBACKGROUND_LOCATION).then(response => {
-    //   console.log(response)
-    // })
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('QuaranPlace Screen')
       getToken()
@@ -202,7 +199,6 @@ export default function QuarantinePlace({ navigation }) {
                       .then(json => { console.log(json) })
                   })
                 })
-
                 navigation.navigate('Home')
               }
               console.log(json)
