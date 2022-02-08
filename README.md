@@ -42,8 +42,8 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- Package install
-    - npm install react-native-boundary --save
-
-- ย้าย status, name, lat, long, radius ไปเก็บไว้ใน asyncstorage เพื่อเรียกใข้ผ่าน foreground service ทีหลัง
-    - สร้าง status, Location สำหรับเก็บไว้ใน asyncstorage ซึ่งจะ refresh ทุกครั้งที่เข้าไปที่หน้า home
+- สามารถส่งอีเมล์แจ้งเตือนว่าให้กลับไปยังสถานที่ Quarantine เมื่ออกนอกสถานที่
+    - หากผ่านไป 5 นาที แล้วยังไม่เข้าสถานที่ จะทำการ Inactive Email
+- สามารถทำงานเมื่อทำการ kill application ได้ โดยทำงานบน foreground service
+- จะสร้าง boundary เมื่อมีการป้อน input เข้าไปที่ Quarantine Page 
+- จะลบ boundary เมื่อมีการกด quit ที้ quarantine page

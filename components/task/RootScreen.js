@@ -26,6 +26,7 @@ export default function RootScreen() {
     const { domain, getToken,
         getLocation, setLocation, removeLocation,
         getStatus, setStatus, removeStatus } = globalContext;
+        
     useEffect(() => {
         onStart()
     }, [])
@@ -49,13 +50,13 @@ export default function RootScreen() {
                             ([locations]) => {
                                 // console.log('subscribe location')
                                 // locationTimeout && clearTimeout(locationTimeout);
-                                console.log(locations);
-                                getStatus().then(data =>{
-                                    console.log('root status get '+data)
-                                })
-                                getToken().then(data => {
-                                    console.log('root token get '+data)
-                                })
+                                // console.log(locations);
+                                // getStatus().then(data =>{
+                                //     console.log('root status get '+data)
+                                // })
+                                // getToken().then(data => {
+                                //     console.log('root token get '+data)
+                                // })
                                 locationSubscription();
                             },
                         );

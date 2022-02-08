@@ -13,6 +13,8 @@ import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
 import { PermissionsAndroid } from 'react-native';
 
+import Boundary, { Events } from 'react-native-boundary';
+
 
 export default function QuarantinePlace({ navigation }) {
   const globalContext = useContext(Context)
@@ -72,14 +74,6 @@ export default function QuarantinePlace({ navigation }) {
                 _address(json.address)
                 _start_date(json.start_datetime)
                 _end_date(json.end_datetime)
-                console.log('Name : ' + name)
-                console.log('lat : ' + lat)
-                console.log('long : ' + long)
-                console.log('radius : ' + radius)
-                console.log('address : ' + address)
-                console.log('start : ' + start_date)
-                console.log('end: ' + end_date)
-                console.log(json)
               } else {
                 _status(json.status)
                 _name('')
@@ -148,6 +142,67 @@ export default function QuarantinePlace({ navigation }) {
             })
             .then(json => {
               if (json.status === 'success') {
+                // Test Set Boundary
+                Boundary.add({
+                  lat: parseFloat(lat),
+                  lng: parseFloat(long),
+                  radius: parseFloat(radius), // in meters
+                  id: name,
+                })
+                  .then(() => console.log("success!"))
+                  .catch(e => console.error("error :(", e));
+
+                Boundary.on(Events.ENTER, id => {
+                  // Prints 'Get out of my Chipotle!!'
+                  console.log(`Get out of my ${id}!!`);
+                  getToken().then(data => {
+                    fetch(domain + 'enterexit/', {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ' + data
+                      },
+                      body: JSON.stringify({
+                        'action': 'enter'
+                      })
+                    }).then(res => {
+                      if (res.ok) {
+                        return res.json()
+                      } else {
+                        throw res.json()
+                      }
+                    })
+                      .then(json => { console.log(json) })
+                  })
+
+                });
+
+                Boundary.on(Events.EXIT, id => {
+                  // Prints 'Ya! You better get out of my Chipotle!!'
+                  console.log(`Ya! You better get out of my ${id}!!`)
+                  getToken().then(data => {
+                    fetch(domain + 'enterexit/', {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ' + data
+                      },
+                      body: JSON.stringify({
+                        'action': 'exit'
+                      })
+                    }).then(res => {
+                      if (res.ok) {
+                        return res.json()
+                      } else {
+                        throw res.json()
+                      }
+                    })
+                      .then(json => { console.log(json) })
+                  })
+                })
+
                 navigation.navigate('Home')
               }
               console.log(json)
@@ -180,6 +235,13 @@ export default function QuarantinePlace({ navigation }) {
           .then(json => {
             console.log(json)
             if (json.status === 'success') {
+              // Remove the events
+              Boundary.off(Events.ENTER)
+              Boundary.off(Events.EXIT)
+              // Remove the boundary from native API´s
+              Boundary.remove('Chipotle')
+                .then(() => console.log('Goodbye Chipotle :('))
+                .catch(e => console.log('Failed to delete Chipotle :)', e))
               navigation.navigate('Home')
             }
           })
