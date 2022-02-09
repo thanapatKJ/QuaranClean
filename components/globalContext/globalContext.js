@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Context = createContext()
 const Provider = ({ children }) => {
-    const [domain] = useState("http://192.168.43.50:8000/api/")
+    const [domain] = useState("http://192.168.140.50:8000/api/")
     const [isLoggedIn, setIsLoggedIn] = useState(true)
     const [userObj, setUserObj] = useState()
     const [appSettings, setAppSettings] = useState({})
@@ -40,6 +40,7 @@ const Provider = ({ children }) => {
         }
     }
     
+
     const setStatus = async (status) => {
         try {
             await AsyncStorage.setItem('@status', String(status))
@@ -100,7 +101,6 @@ const Provider = ({ children }) => {
             console.log(error)
         }
     }
-
 
     const globalContext = {
         domain,

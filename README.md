@@ -40,6 +40,10 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - Boundary
 "react-native-boundary": "^1.1.1",
 
+- Face API
+"@regulaforensics/react-native-face-api": "^3.2.0",
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
+- package install
+    - npm install @regulaforensics/react-native-face-api
