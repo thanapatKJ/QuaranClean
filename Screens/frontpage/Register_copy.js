@@ -1,232 +1,128 @@
-import React, { Component } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
-  KeyboardAvoidingView,
-} from "react-native";
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
+import { Context } from "../../components/globalContext/globalContext";
+import { RNCamera } from 'react-native-camera';
 
-export default function Register(props) {
+
+export default function Register({ navigation }) {
+  const globalContext = useContext(Context)
+  const {
+    setIsLoggedIn,
+    setUserObj, domain,
+    setToken, getToken } = globalContext;
+  const [name, _name] = useState('');
+  const [lastname, _lastname] = useState('');
+  const [idcard, _idcard] = useState('');
+  const [numbers, _numbers] = useState('');
+  const [password, _password] = useState('');
+  const [cpassword, _cpassword] = useState('');
+  const [email, _email] = useState('');
+
+  sendRegisterData = () => {
+    if (!(name && lastname && idcard && numbers && password && cpassword && email)){
+      Alert.alert('Please fill all the boxes above.')
+    }
+    else if (password == cpassword) {
+      let post_data = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+          // 'X-CSRFToken':  cookie.load('csrftoken')
+        },
+        body: JSON.stringify({
+          'username': idcard,
+          'first_name': name,
+          'last_name': lastname,
+          'email': email,
+          'password': password,
+          'id_cards': idcard,
+          'numbers': numbers
+        })
+      }
+      fetch(domain + 'register/', post_data)
+        .then(response => response.json())
+        .then(data => { console.log(data) })
+        // .then({ navigate('Login')} )
+        // .then({})
+        .catch(error => { Alert.alert(error.message) })
+      // navigation.navigate('Login')
+    } else {
+      Alert.alert('Password does not match')
+    }
+  }
   return (
-    <KeyboardAvoidingView
-      behavior="padding" >
-      <ScrollView>
-
-        <View style={styles.container}>
-          <View style={styles.registerQuaranCleanColumn}>
-            <Text style={styles.registerQuaranClean}>Register QuaranClean</Text>
-            <View style={styles.username1}>
-              <TextInput
-                placeholder="Name"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput1}
-              ></TextInput>
-            </View>
-            <View style={styles.username2}>
-              <TextInput
-                placeholder="Lastname"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput2}
-              ></TextInput>
-            </View>
-            <View style={styles.username3}>
-              <TextInput
-                placeholder="ID card number"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput3}
-              ></TextInput>
-            </View>
-            <View style={styles.username4}>
-              <TextInput
-                placeholder="Phone number"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput4}
-              ></TextInput>
-            </View>
-            <View style={styles.username5}>
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput5}
-              ></TextInput>
-            </View>
-            <View style={styles.username6}>
-              <TextInput
-                placeholder="Confirm password"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput6}
-              ></TextInput>
-            </View>
-            <View style={styles.username7}>
-              <TextInput
-                placeholder="Email"
-                placeholderTextColor="rgba(74,74,74,1)"
-                secureTextEntry={false}
-                style={styles.usernameInput7}
-              ></TextInput>
-            </View>
-          </View>
-          <View style={styles.registerQuaranCleanColumnFiller}></View>
-          <View style={styles.button1Column}>
-            <TouchableOpacity
-              onPress={() => props.navigation.navigate("Channels")}
-              style={styles.button1}
-            >
-              <Text style={styles.confirm1}>CONFIRM</Text>
-            </TouchableOpacity>
-            <View style={styles.rect1}></View>
-          </View>
-        </View>
-      </ScrollView>
-
-    </KeyboardAvoidingView>
-
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Register QuaranClean</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        onChangeText={name => _name(name)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Lastname"
+        onChangeText={lastname => _lastname(lastname)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="ID Card Numbers"
+        keyboardType="numeric"
+        onChangeText={idcard => _idcard(idcard)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        keyboardType="numeric"
+        onChangeText={numbers => _numbers(numbers)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        onChangeText={password => _password(password)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        secureTextEntry={true}
+        onChangeText={cpassword => _cpassword(cpassword)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={email => _email(email)}
+      />
+      <View style={styles.separator} />
+      <View>
+        <Button
+          title="Confirm"
+          onPress={sendRegisterData}
+        />
+      </View>
+    </SafeAreaView>
   );
-}
 
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgba(0,0,139,1)"
+    justifyContent: 'center',
+    marginHorizontal: 16,
   },
-  registerQuaranClean: {
-    color: "rgba(255,255,255,1)",
-    fontSize: 27,
-    marginLeft: 2
+  title: {
+    textAlign: 'center',
+    marginVertical: 8,
+    fontSize: 36,
   },
-  username1: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 24
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  usernameInput1: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
   },
-  username2: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput2: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  username3: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput3: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  username4: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput4: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  username5: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput5: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  username6: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput6: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  username7: {
-    height: 44,
-    backgroundColor: "rgba(251,247,247,1)",
-    borderRadius: 5,
-    marginTop: 26
-  },
-  usernameInput7: {
-    height: 30,
-    color: "rgba(0,0,0,1)",
-    marginTop: 7,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  registerQuaranCleanColumn: {
-    marginTop: 71,
-    marginLeft: 41,
-    marginRight: 40
-  },
-  registerQuaranCleanColumnFiller: {
-    flex: 1
-  },
-  button1: {
-    height: 44,
-    backgroundColor: "rgba(37,205,236,1)",
-    borderRadius: 5,
-    justifyContent: "center",
-    marginBottom: -74,
-    marginLeft: 25,
-    marginRight: 24
-  },
-  confirm1: {
-    color: "rgba(0,0,0,1)",
-    alignSelf: "center"
-  },
-  rect1: {
-    height: 4,
-    backgroundColor: "#25cdec",
-    marginBottom: 70
-  },
-  button1Column: {
-    marginBottom: 46,
-    marginLeft: 16,
-    marginRight: 17
-  }
 });
-
-
-

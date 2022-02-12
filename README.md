@@ -47,3 +47,4 @@ Descriptions
 - สามารถ Run Application บนมือถือได้
 - package install
     - npm install @regulaforensics/react-native-face-api
+    - npm install react-native-camera --save

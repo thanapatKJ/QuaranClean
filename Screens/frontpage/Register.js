@@ -1,124 +1,74 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
-import { Context } from "../../components/globalContext/globalContext";
+'use strict';
+import React, { PureComponent } from 'react';
+import { AppRegistry, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RNCamera } from 'react-native-camera';
 
-
-export default function Register({ navigation }) {
-  const globalContext = useContext(Context)
-  const {
-    setIsLoggedIn,
-    setUserObj, domain,
-    setToken, getToken } = globalContext;
-  const [name, _name] = useState('');
-  const [lastname, _lastname] = useState('');
-  const [idcard, _idcard] = useState('');
-  const [numbers, _numbers] = useState('');
-  const [password, _password] = useState('');
-  const [cpassword, _cpassword] = useState('');
-  const [email, _email] = useState('');
-
-  sendRegisterData = () => {
-    if (password == cpassword) {
-      let post_data = {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-          // 'X-CSRFToken':  cookie.load('csrftoken')
-        },
-        body: JSON.stringify({
-          'username': idcard,
-          'first_name': name,
-          'last_name': lastname,
-          'email': email,
-          'password': password,
-          'id_cards': idcard,
-          'numbers': numbers
-        })
-      }
-      fetch(domain + 'register/', post_data)
-        .then(response => response.json())
-        .then(data => { console.log(data) })
-        // .then({ navigate('Login')} )
-        // .then({})
-        .catch(error => { Alert.alert(error.message) })
-      navigation.navigate('Login')
-    } else {
-      Alert.alert('Password does not match')
-    }
-  }
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Register QuaranClean</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        onChangeText={name => _name(name)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Lastname"
-        onChangeText={lastname => _lastname(lastname)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="ID Card Numbers"
-        keyboardType="numeric"
-        onChangeText={idcard => _idcard(idcard)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        keyboardType="numeric"
-        onChangeText={numbers => _numbers(numbers)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-        onChangeText={password => _password(password)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        secureTextEntry={true}
-        onChangeText={cpassword => _cpassword(cpassword)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={email => _email(email)}
-      />
-      <View style={styles.separator} />
-      <View>
-        <Button
-          title="Confirm"
-          onPress={sendRegisterData}
+export default class Register extends PureComponent {
+  render() {
+    return (
+      <View style={styles.container}>
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.front}
+          flashMode={RNCamera.Constants.FlashMode.on}
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+          androidRecordAudioPermissionOptions={{
+            title: 'Permission to use audio recording',
+            message: 'We need your permission to use your audio',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+          faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
+          onFacesDetected={ barcodes  => {
+            console.log(barcodes);
+          }}
         />
+        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
+            <Text style={{ fontSize: 14 }}> SNAP </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </SafeAreaView>
-  );
+    );
+  }
 
+  takePicture = async () => {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options);
+      console.log(data.uri);
+    }
+  };
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    marginHorizontal: 16,
+    flexDirection: 'column',
+    backgroundColor: 'black',
   },
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
-    fontSize: 36,
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
+  capture: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
   },
 });
+
+// AppRegistry.registerComponent('App', () => ExampleApp);
