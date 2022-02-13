@@ -12,6 +12,14 @@ const Provider = ({ children }) => {
     const [long, _long] = useState()
     const [radius, _radius] = useState()
     const [status, _status] = useState()
+    const [regName, _regName] = useState()
+    const [regLastname, _regLastname] = useState()
+    const [regIDcard, _regIDcard] = useState()
+    const [regNumber, _regNumber] = useState()
+    const [regPassword, _regPassword] = useState()
+    const [regCpassword, _regCpassword] = useState()
+    const [regEmail, _regEmail] = useState()
+    const [regImg, _regImg] = useState(require('../../assets/images/portrait.png'))
 
     const setToken = async (token) => {
         try {
@@ -115,6 +123,15 @@ const Provider = ({ children }) => {
         lat, _lat,
         long, _long,
         radius, _radius,
+        regName, _regName,
+        regLastname, _regLastname,
+        regIDcard, _regIDcard,
+        regNumber, _regNumber,
+        regPassword, _regPassword,
+        regCpassword, _regCpassword,
+        regEmail, _regEmail,
+        regImg, _regImg,
+
         getStatus, setStatus, removeStatus,
         getLocation, setLocation, removeLocation,
     }

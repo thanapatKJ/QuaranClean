@@ -43,8 +43,12 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - Face API
 "@regulaforensics/react-native-face-api": "^3.2.0",
 
+- Camera
+"react-native-camera": "^4.2.1",
+
 Descriptions
 - สามารถ Run Application บนมือถือได้
 - package install
     - npm install @regulaforensics/react-native-face-api
     - npm install react-native-camera --save
+- สามารถส่งรูปขึ้นไปเก็บที่ Server ได้
