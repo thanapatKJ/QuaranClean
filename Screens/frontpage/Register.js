@@ -14,16 +14,14 @@ export default function Register({ navigation }) {
     regCpassword, _regCpassword,
     regEmail, _regEmail,
     regImg, _regImg } = globalContext;
-
   sendRegisterData = () => {
     if (!(regName && regLastname && regIDcard && regNumber && regPassword && regCpassword && regEmail)) {
       Alert.alert('Please fill all the boxes above.')
     }
     else if (regCpassword == regPassword) {
-      console.log(regImg)
       let form = new FormData();
       form.append("image", {
-        'name': "123.jpg",
+        'name': String(regIDcard) + ".jpg",
         'uri': regImg.uri,
         'type': "image/jpg"
       })
@@ -34,7 +32,6 @@ export default function Register({ navigation }) {
       form.append("password", regPassword)
       form.append("id_cards", regIDcard)
       form.append("numbers", regNumber)
-
       let post_data = {
         method: 'POST',
         headers: {
@@ -48,6 +45,7 @@ export default function Register({ navigation }) {
         .then(data => {
           if (data.status == "success") {
             Alert.alert('Register success !!!')
+            navigation.navigate('Login')
           }
         })
         // .then({ navigate('Login')} )
@@ -58,7 +56,6 @@ export default function Register({ navigation }) {
       Alert.alert('Password does not match')
     }
   }
-  
   pickImage = () => {
     navigation.navigate('RegisterCam')
   }

@@ -48,7 +48,4 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- package install
-    - npm install @regulaforensics/react-native-face-api
-    - npm install react-native-camera --save
-- สามารถส่งรูปขึ้นไปเก็บที่ Server ได้
+- ทำให้ลบรูปเมื่อย้อนกลับไปที่หน้า Login

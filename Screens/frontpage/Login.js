@@ -15,7 +15,8 @@ export default function Login({ navigation, route, props }) {
   const {
     setIsLoggedIn,
     setUserObj, domain,
-    setToken, getToken } = globalContext;
+    setToken, getToken,
+    _regImg } = globalContext;
 
   const [idcard, _idcard] = useState();
   const [password, _password] = useState("");
@@ -23,10 +24,10 @@ export default function Login({ navigation, route, props }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      
+      _regImg(require('../../assets/images/portrait.png'))
       console.log('Login Screen')
       console.log(ReactNativeForegroundService.is_running());
-
+      
       getToken()
         .then(data => {
           // console.log('token : ' + data)
