@@ -2,8 +2,6 @@ import React from 'react'
 import { Dimensions, StyleSheet, View, Text } from 'react-native';
 import RootScreen from './task/RootScreen';
 
-const { width, height } = Dimensions.get('window');
-
 const Header = () => {
     return (
         <>

@@ -1,15 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { Dimensions, StyleSheet, TouchableOpacity, View, Text, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
-// import Map from '../../components/Maps_test';
-import Map from '../../components/Maps';
 
-import MapView, { PROVIDER_GOOGLE, Marker, ProviderPropType, Circle } from 'react-native-maps';
-
-import ReactNativeForegroundService from "@supersami/rn-foreground-service";
-
-import RNLocation from 'react-native-location';
+import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
@@ -26,7 +20,7 @@ export default function Home({ navigation }) {
     long, _long,
     radius, _radius,
     status, _status,
-    name, _name,
+    _name,
     getLocation, setLocation, removeLocation,
     getStatus, setStatus, removeStatus } = globalContext;
 

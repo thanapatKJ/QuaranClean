@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput, Image, TouchableHighlight } from 'react-native';
 import { Context } from "../../components/globalContext/globalContext";
 
@@ -13,7 +13,7 @@ export default function Register({ navigation }) {
     regPassword, _regPassword,
     regCpassword, _regCpassword,
     regEmail, _regEmail,
-    regImg, _regImg } = globalContext;
+    regImg } = globalContext;
   sendRegisterData = () => {
     if (!(regName && regLastname && regIDcard && regNumber && regPassword && regCpassword && regEmail)) {
       Alert.alert('Please fill all the boxes above.')

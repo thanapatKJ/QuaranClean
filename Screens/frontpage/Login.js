@@ -10,7 +10,7 @@ import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Context } from "../../components/globalContext/globalContext";
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
-export default function Login({ navigation, route, props }) {
+export default function Login({ navigation }) {
   const globalContext = useContext(Context)
   const {
     setIsLoggedIn,

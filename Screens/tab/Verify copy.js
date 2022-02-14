@@ -6,19 +6,15 @@ import {
   SafeAreaView,
   Text,
   Alert,
-} from 'react-native';
+} from 'react-native'; import { fonts } from 'react-native-elements/dist/config';
 import Header from '../../components/Header';
 
 import { Context } from '../../components/globalContext/globalContext';
 import { _LogBoxInspectorContainer } from 'react-native/Libraries/LogBox/LogBoxInspectorContainer';
-import FaceSDK, { Enum, FaceCaptureResponse, MatchFacesResponse, MatchFacesRequest, MatchFacesImage, MatchFacesSimilarityThresholdSplit } from '@regulaforensics/react-native-face-api'
-
-var image1 = new MatchFacesImage()
-var image2 = new MatchFacesImage()
 
 export default function Verify({ navigation }) {
   const globalContext = useContext(Context)
-  const { getToken, domain } = globalContext;
+  const { getToken ,domain} = globalContext;
 
   const [verified, _verified] = useState();
   const [unverified, _unverified] = useState();
@@ -32,7 +28,7 @@ export default function Verify({ navigation }) {
       console.log('Verify Screen')
       getToken()
         .then(data => {
-          fetch(domain + 'verify/', {
+          fetch(domain+'verify/', {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -46,7 +42,7 @@ export default function Verify({ navigation }) {
               } else {
                 throw res.json()
               }
-
+              
             })
             .then(json => {
               _next_time('')
@@ -90,14 +86,10 @@ export default function Verify({ navigation }) {
   })
 
   function sendVerify() {
-    FaceSDK.presentFaceCaptureActivity(result => {
-      // this.setImage(first, FaceCaptureResponse.fromJson(JSON.parse(result)).image.bitmap, Enum.ImageType.LIVE)
-    }, e => { })
-
-
+    console.log('sendVerify')
     getToken()
       .then(data => {
-        fetch(domain + 'verify/', {
+        fetch(domain+'verify/', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -120,8 +112,8 @@ export default function Verify({ navigation }) {
             console.log(json)
             if (json.status == 'success') {
               console.log('success')
-              Alert.alert("Send Verify Signal to server.")
               navigation.navigate('Home')
+              Alert.alert("Send Verify Signal to server")
             }
           })
       })

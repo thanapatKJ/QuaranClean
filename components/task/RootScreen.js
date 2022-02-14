@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
-import { Context, Provider } from '../globalContext/globalContext';
+import { Context } from '../globalContext/globalContext';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
@@ -18,13 +18,10 @@ RNLocation.configure({
     maxWaitTime: 5000, // Milliseconds
 });
 let locationSubscription = null;
-let locationTimeout = null;
 
 export default function RootScreen() {
     const globalContext = useContext(Context)
-    const { domain, getToken,
-        getLocation, setLocation, removeLocation,
-        getStatus, setStatus, removeStatus } = globalContext;
+    const { domain, getToken } = globalContext;
 
     useEffect(() => {
         onStart()

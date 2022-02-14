@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput, TextComponent } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Button, View, Text, Alert, TextInput } from 'react-native';
 import { Context } from '../../components/globalContext/globalContext';
 
 import Header from '../../components/Header';
