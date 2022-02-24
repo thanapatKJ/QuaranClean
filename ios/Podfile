@@ -16,6 +16,8 @@ target 'QuaranClean' do
 
   pod 'RNBoundary', :path => '../node_modules/react-native-boundary'
 
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+
   target 'QuaranCleanTests' do
     inherit! :complete
     # Pods for testing

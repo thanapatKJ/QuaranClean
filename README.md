@@ -48,4 +48,5 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - สามารถ Run Application บนมือถือได้
-- ทำให้ลบรูปเมื่อย้อนกลับไปที่หน้า Login
+- สามารถ ทำ Face Verify ได้
+- ครบสมบูรณ์ เหลือ refactoring code

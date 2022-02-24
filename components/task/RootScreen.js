@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text } from "react-native";
+import { View } from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
@@ -69,7 +69,7 @@ export default function RootScreen() {
                     if (granted) {
                         locationSubscription = RNLocation.subscribeToLocationUpdates(
                             ([locations]) => {
-                                console.log(locations);
+                                // console.log(locations);
                                 locationSubscription();
                             },
                         );

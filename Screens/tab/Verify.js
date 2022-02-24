@@ -12,9 +12,9 @@ import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
 import { _LogBoxInspectorContainer } from 'react-native/Libraries/LogBox/LogBoxInspectorContainer';
 import FaceSDK, { Enum, FaceCaptureResponse, MatchFacesResponse, MatchFacesRequest, MatchFacesImage, MatchFacesSimilarityThresholdSplit } from '@regulaforensics/react-native-face-api'
+import RNFetchBlob from 'rn-fetch-blob'
 
-var serverImage = new MatchFacesImage()
-var photoImage = new MatchFacesImage()
+
 
 export default function Verify({ navigation }) {
   const globalContext = useContext(Context)
@@ -25,7 +25,8 @@ export default function Verify({ navigation }) {
   const [inactive, _inactive] = useState();
   const [none, _none] = useState();
   const [next_time, _next_time] = useState('');
-
+  var serverImage = new MatchFacesImage()
+  var photoImage = new MatchFacesImage()
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -76,7 +77,6 @@ export default function Verify({ navigation }) {
                 _verified(false)
                 _inactive(true)
               }
-              console.log(json)
               if (none) {
                 console.log('none')
               }
@@ -90,45 +90,92 @@ export default function Verify({ navigation }) {
   })
 
   function sendVerify() {
-    
-    FaceSDK.presentFaceCaptureActivity(result => {
-      // this.setImage(first, FaceCaptureResponse.fromJson(JSON.parse(result)).image.bitmap, Enum.ImageType.LIVE)
-      // getToken()
-      //   .then(data => {
-      //     fetch(domain + 'verify/', {
-      //       method: 'POST',
-      //       headers: {
-      //         'Accept': 'application/json',
-      //         'Content-Type': 'application/json',
-      //         'Authorization': 'Token ' + data
-      //       },
-      //       body: JSON.stringify({
-      //         'lat': '13.72791061004847',
-      //         'long': '100.55003259290271'
-      //       })
-      //     })
-      //       .then(res => {
-      //         if (res.ok) {
-      //           return res.json()
-      //         } else {
-      //           throw res.json()
-      //         }
-      //       })
-      //       .then(json => {
-      //         console.log(json)
-      //         if (json.status == 'success') {
-      //           console.log('success')
-      //           Alert.alert("Send Verify Signal to server.")
-      //           navigation.navigate('Home')
-      //         }
-      //       })
-      //   })
-      //   .catch(error => {
-      //     Alert.alert("ERROR " + error)
-      //   })
-    }, e => { })
-    // Alert.alert("Send Verify Signal to server")
+    getToken()
+      .then(data => {
+        fetch(domain + 'profile/', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + data
+          }
+        })
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            } else {
+              throw res.json()
+            }
+          })
+          .then(json => {
+            FaceSDK.presentFaceCaptureActivity(result => {
+              RNFetchBlob.fetch('GET', domain + 'user_images/' + json.id_cards + '.jpg', {
+                // Authorization: 'Bearer access-token...',
+              }).then((res) => {
+                let status = res.info().status;
+                if (status == 200) {
+                  serverImage.bitmap = res.base64()
+                  serverImage.imageType = Enum.ImageType.PRINTED
+                  photoImage.bitmap = FaceCaptureResponse.fromJson(JSON.parse(result)).image.bitmap
+                  photoImage.imageType = Enum.ImageType.LIVE
+                  if (serverImage == null || serverImage.bitmap == null || serverImage.bitmap == "" || photoImage == null || photoImage.bitmap == null || photoImage.bitmap == "")
+                    return
+                  request = new MatchFacesRequest()
+                  request.images = [serverImage, photoImage]
+                  FaceSDK.matchFaces(JSON.stringify(request), response => {
+                    response = MatchFacesResponse.fromJson(JSON.parse(response))
+                    FaceSDK.matchFacesSimilarityThresholdSplit(JSON.stringify(response.results), 0.75, str => {
+                      var split = MatchFacesSimilarityThresholdSplit.fromJson(JSON.parse(str))
+                      if (split.matchedFaces.length > 0) {
+                        console.log(((split.matchedFaces[0].similarity * 100).toFixed(2) + "%"))
+                        getToken()
+                          .then(data => {
+                            fetch(domain + 'verify/', {
+                              method: 'POST',
+                              headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Token ' + data
+                              },
+                              body: JSON.stringify({
+                                'lat': '13.72791061004847',
+                                'long': '100.55003259290271'
+                              })
+                            })
+                              .then(res => {
+                                if (res.ok) {
+                                  return res.json()
+                                } else {
+                                  throw res.json()
+                                }
+                              })
+                              .then(json => {
+                                if (json.status == 'success') {
+                                  console.log('success')
+                                  Alert.alert("Send Verify Signal to server.")
+                                  navigation.navigate('Home')
+                                }
+                              })
+                          })
+                          .catch(error => {
+                            Alert.alert("ERROR " + error)
+                          })
+                      } else {
+                        console.log('not correct')
+                      }
+                    }, e => { })
+                  }, e => { })
+
+                }
+              }).catch((errorMessage, statusCode) => { })
+            }, e => { })
+          })
+      })
+      .catch(error => {
+        console.log("ERROR " + error)
+      })
   }
+
   return (
     <SafeAreaView>
       <Header />
