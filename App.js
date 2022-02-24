@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { LogBox, View } from 'react-native';
+import React from 'react';
+import {  View } from 'react-native';
 
 import Navigator from './components/Navigator/Navigator';
 import { NavigationContainer } from '@react-navigation/native';
-import { Context, Provider } from './components/globalContext/globalContext';
+import { Provider } from './components/globalContext/globalContext';
 
 // import RootScreen from './components/task/RootScreen';
 console.disableYellowBox = true;

@@ -13,8 +13,8 @@ import { Context } from '../../components/globalContext/globalContext';
 import { _LogBoxInspectorContainer } from 'react-native/Libraries/LogBox/LogBoxInspectorContainer';
 import FaceSDK, { Enum, FaceCaptureResponse, MatchFacesResponse, MatchFacesRequest, MatchFacesImage, MatchFacesSimilarityThresholdSplit } from '@regulaforensics/react-native-face-api'
 
-var image1 = new MatchFacesImage()
-var image2 = new MatchFacesImage()
+var serverImage = new MatchFacesImage()
+var photoImage = new MatchFacesImage()
 
 export default function Verify({ navigation }) {
   const globalContext = useContext(Context)
@@ -90,44 +90,43 @@ export default function Verify({ navigation }) {
   })
 
   function sendVerify() {
+    
     FaceSDK.presentFaceCaptureActivity(result => {
       // this.setImage(first, FaceCaptureResponse.fromJson(JSON.parse(result)).image.bitmap, Enum.ImageType.LIVE)
+      // getToken()
+      //   .then(data => {
+      //     fetch(domain + 'verify/', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Accept': 'application/json',
+      //         'Content-Type': 'application/json',
+      //         'Authorization': 'Token ' + data
+      //       },
+      //       body: JSON.stringify({
+      //         'lat': '13.72791061004847',
+      //         'long': '100.55003259290271'
+      //       })
+      //     })
+      //       .then(res => {
+      //         if (res.ok) {
+      //           return res.json()
+      //         } else {
+      //           throw res.json()
+      //         }
+      //       })
+      //       .then(json => {
+      //         console.log(json)
+      //         if (json.status == 'success') {
+      //           console.log('success')
+      //           Alert.alert("Send Verify Signal to server.")
+      //           navigation.navigate('Home')
+      //         }
+      //       })
+      //   })
+      //   .catch(error => {
+      //     Alert.alert("ERROR " + error)
+      //   })
     }, e => { })
-
-
-    getToken()
-      .then(data => {
-        fetch(domain + 'verify/', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + data
-          },
-          body: JSON.stringify({
-            'lat': '13.72791061004847',
-            'long': '100.55003259290271'
-          })
-        })
-          .then(res => {
-            if (res.ok) {
-              return res.json()
-            } else {
-              throw res.json()
-            }
-          })
-          .then(json => {
-            console.log(json)
-            if (json.status == 'success') {
-              console.log('success')
-              Alert.alert("Send Verify Signal to server.")
-              navigation.navigate('Home')
-            }
-          })
-      })
-      .catch(error => {
-        Alert.alert("ERROR " + error)
-      })
     // Alert.alert("Send Verify Signal to server")
   }
   return (
