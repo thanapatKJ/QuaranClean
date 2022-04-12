@@ -25,9 +25,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       _regImg(require('../../assets/images/portrait.png'))
-      console.log('Login Screen')
-      console.log(ReactNativeForegroundService.is_running());
-      
+      console.log('Login Screen')      
       getToken()
         .then(data => {
           // console.log('token : ' + data)
@@ -66,6 +64,7 @@ export default function Login({ navigation }) {
   })
 
   function sendLoginData() {
+    console.log(domain)
     console.log('sendLoginData')
     setError("")
     let body = JSON.stringify({
@@ -96,11 +95,10 @@ export default function Login({ navigation }) {
           .then(data => {
             console.log('data ' + data)
           })
-          .then(value => {
-            console.log('value ' + value)
-          })
         setIsLoggedIn(true)
         navigation.replace('Tab')
+        
+
       })
       .catch(error => {
         console.log(error)

@@ -28,8 +28,7 @@ export default function QuarantinePlace({ navigation }) {
   const [address, _address] = useState('');
   const [start_date, _start_date] = useState('');
   const [end_date, _end_date] = useState('');
-
-
+  
   useEffect(() => {
     PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
@@ -71,6 +70,67 @@ export default function QuarantinePlace({ navigation }) {
                 _address(json.address)
                 _start_date(json.start_datetime)
                 _end_date(json.end_datetime)
+
+                // Boundary.add({
+                //   lat: parseFloat(lat),
+                //   lng: parseFloat(long),
+                //   radius: parseFloat(radius), // in meters
+                //   id: 'place',
+                // })
+                //   .then(() => console.log("success!"))
+                //   .catch(e => console.error("error :(", e));
+
+                // Boundary.on(Events.ENTER, id => {
+                //   // Prints 'Get out of my Chipotle!!'
+                //   console.log(`Get out of my ${id}!!`);
+                //   getToken().then(data => {
+                //     fetch(domain + 'enterexit/', {
+                //       method: 'POST',
+                //       headers: {
+                //         'Accept': 'application/json',
+                //         'Content-Type': 'application/json',
+                //         'Authorization': 'Token ' + data
+                //       },
+                //       body: JSON.stringify({
+                //         'action': 'enter'
+                //       })
+                //     }).then(res => {
+                //       if (res.ok) {
+                //         return res.json()
+                //       } else {
+                //         throw res.json()
+                //       }
+                //     })
+                //       .then(json => { console.log(json) })
+                //   })
+
+                // });
+
+                // Boundary.on(Events.EXIT, id => {
+                //   // Prints 'Ya! You better get out of my Chipotle!!'
+                //   console.log(`Ya! You better get out of my ${id}!!`)
+                //   getToken().then(data => {
+                //     fetch(domain + 'enterexit/', {
+                //       method: 'POST',
+                //       headers: {
+                //         'Accept': 'application/json',
+                //         'Content-Type': 'application/json',
+                //         'Authorization': 'Token ' + data
+                //       },
+                //       body: JSON.stringify({
+                //         'action': 'exit'
+                //       })
+                //     }).then(res => {
+                //       if (res.ok) {
+                //         return res.json()
+                //       } else {
+                //         throw res.json()
+                //       }
+                //     })
+                //       .then(json => { console.log(json) })
+                //   })
+                // })
+
               } else {
                 _status(json.status)
                 _name('')
@@ -235,9 +295,10 @@ export default function QuarantinePlace({ navigation }) {
               Boundary.off(Events.ENTER)
               Boundary.off(Events.EXIT)
               // Remove the boundary from native API´s
-              Boundary.remove('Chipotle')
-                .then(() => console.log('Goodbye Chipotle :('))
-                .catch(e => console.log('Failed to delete Chipotle :)', e))
+              // Boundary.remove('Chipotle')
+              //   .then(() => console.log('Goodbye Chipotle :('))
+              //   .catch(e => console.log('Failed to delete Chipotle :)', e))
+              Boundary.removeAll()
               navigation.navigate('Home')
             }
           })

@@ -65,7 +65,6 @@ export default function Verify({ navigation }) {
                 _none(false)
                 _inactive(false)
               } else if (json.status === 'None') {
-                console.log('none')
                 _none(true)
                 _unverified(false)
                 _verified(false)
@@ -76,9 +75,6 @@ export default function Verify({ navigation }) {
                 _unverified(false)
                 _verified(false)
                 _inactive(true)
-              }
-              if (none) {
-                console.log('none')
               }
             })
         })
@@ -128,6 +124,7 @@ export default function Verify({ navigation }) {
                       var split = MatchFacesSimilarityThresholdSplit.fromJson(JSON.parse(str))
                       if (split.matchedFaces.length > 0) {
                         console.log(((split.matchedFaces[0].similarity * 100).toFixed(2) + "%"))
+                        console.log('passed')
                         getToken()
                           .then(data => {
                             fetch(domain + 'verify/', {
@@ -162,6 +159,7 @@ export default function Verify({ navigation }) {
                           })
                       } else {
                         console.log('not correct')
+                        Alert.alert('Face not correct. Please try again.')
                       }
                     }, e => { })
                   }, e => { })
@@ -206,6 +204,7 @@ export default function Verify({ navigation }) {
                     ?
                     <View>
                       <Text style={styles.title}>Your quarantine is inactive.</Text>
+                      <Text style={styles.title}>Please contact the admin.</Text>
                     </View>
                     : <></>
                   }</>

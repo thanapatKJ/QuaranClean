@@ -47,6 +47,5 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 "react-native-camera": "^4.2.1",
 
 Descriptions
-- สามารถ Run Application บนมือถือได้
-- สามารถ ทำ Face Verify ได้
-- ครบสมบูรณ์ เหลือ refactoring code
+- Fix bugs 
+    - Fixing bugs ExitEnter

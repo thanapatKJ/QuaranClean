@@ -7,6 +7,7 @@ import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
+
 const ASPECT_RATIO = width / height;
 const LATITUDE = 13.7279279;
 const LONGITUDE = 100.5497879;
@@ -48,10 +49,10 @@ export default function Home({ navigation }) {
   //   }
   // })
 
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Home Screen')
-
       getToken()
         .then(data => {
           fetch(domain + 'quarantine/', {
@@ -66,14 +67,11 @@ export default function Home({ navigation }) {
               if (res.ok) {
                 return res.json()
               } else {
-                // setError("Invalid Credentials")
                 throw res.json()
               }
             })
             .then(json => {
-              // console.log(json)
               if (json.status) {
-                // console.log('status eng')
                 _lat(json.lat)
                 _long(json.long)
                 _radius(json.radius)
@@ -81,19 +79,15 @@ export default function Home({ navigation }) {
                 removeLocation().then()
                 setLocation(json)
               }
-              // console.log('home json status '+json.status)
               if (removeStatus()) {
                 console.log('removeStatus')
-                
+
                 setStatus(json.status)
-                
-                // getStatus().then(data=>{
-                  // console.log('status after remove ')+ data})
                 _status(json.status)
-                
-                if(json.status){
-                  getLocation().then(data=>{
-                    console.log('location home '+data['name'])
+
+                if (json.status) {
+                  getLocation().then(data => {
+                    console.log('location home ' + data['name'])
                   })
                 }
               }
@@ -113,12 +107,12 @@ export default function Home({ navigation }) {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           style={styles.map}
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+        initialRegion={{
+          latitude: LATITUDE,
+          longitude: LONGITUDE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
         // initialRegion={onUserLocationChange}
         // onUser
         // ref = {(mapView) => {mapView}}

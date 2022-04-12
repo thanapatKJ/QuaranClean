@@ -5,6 +5,8 @@ import { Context } from '../../components/globalContext/globalContext';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
+import Boundary from 'react-native-boundary';
+
 export default function Profile({ navigation, props }) {
   const globalContext = useContext(Context)
   const {
@@ -69,6 +71,9 @@ export default function Profile({ navigation, props }) {
               'Authorization': 'Token ' + data
             }
           })
+          Boundary.remove('place')
+            .then(() => console.log('Goodbye Chipotle :('))
+            .catch(e => console.log('Failed to delete Chipotle :)', e))
           console.log('Token ' + data)
           // console.log(ReactNativeForegroundService.get_all_tasks());
           // ReactNativeForegroundService.remove_all_tasks();

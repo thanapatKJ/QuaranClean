@@ -7,6 +7,8 @@ import { Context } from '../globalContext/globalContext';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
+import Boundary, { Events } from 'react-native-boundary';
+
 RNLocation.configure({
     distanceFilter: 10, // Meters
     desiredAccuracy: {
@@ -25,60 +27,35 @@ export default function RootScreen() {
 
     useEffect(() => {
         onStart()
-        // check()
     }, [])
-
-    const check = () => {
-        console.log('check rootscreen')
-        getToken().then(data => {
-            fetch(domain + 'check/', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Token ' + data
-                }
-            })
-                .then(res => {
-                    if (res.ok) {
-                        return res.json()
-                    } else {
-                        throw res.json()
-                    }
-                })
-                .then(json => {
-                    console.log(json)
-                })
-        })
-    }
-
     // Checking if the task i am going to create already exist and running, which means that the foreground is also running.
     const onStart = () => {
         console.log('onStart')
-        if (ReactNativeForegroundService.is_task_running('taskid')) return;
+        if (ReactNativeForegroundService.is_task_running('taskid'))
+            return;
         // Creating a task.
         console.log('add task taskid')
         ReactNativeForegroundService.add_task(
             () => {
-                RNLocation.requestPermission({
-                    android: {
-                        detail: 'fine',
-                    },
-                }).then((granted) => {
-                    // if has permissions try to obtain location with RN location
-                    if (granted) {
-                        locationSubscription = RNLocation.subscribeToLocationUpdates(
-                            ([locations]) => {
-                                // console.log(locations);
-                                locationSubscription();
-                            },
-                        );
-                    }
-                    else {
-                        locationSubscription && locationSubscription();
-                        console.log('no permissions to obtain location');
-                    }
-                });
+                // RNLocation.requestPermission({
+                //     android: {
+                //         detail: 'fine',
+                //     },
+                // }).then((granted) => {
+                //     // if has permissions try to obtain location with RN location
+                //     if (granted) {
+                //         locationSubscription = RNLocation.subscribeToLocationUpdates(
+                //             ([locations]) => {
+                //                 // console.log(locations);
+                //                 locationSubscription();
+                //             },
+                //         );
+                //     }
+                //     else {
+                //         locationSubscription && locationSubscription();
+                //         console.log('no permissions to obtain location');
+                //     }
+                // });
             },
             {
                 delay: 1000,
@@ -87,7 +64,89 @@ export default function RootScreen() {
                 onError: (e) => console.log('Error logging:', e),
             },
         );
+        Boundary.remove('place')
+            .then(() => console.log('Goodbye Chipotle :('))
+            .catch(e => console.log('Failed to delete Chipotle :)', e))
+        Boundary.off(Events.ENTER)
+        Boundary.off(Events.EXIT)
+        getToken()
+            .then(data => {
+                fetch(domain + 'quarantine/', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ' + data
+                    },
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            return res.json()
+                        } else {
+                            throw res.json()
+                        }
+                    })
+                    .then(json => {
+                        if (json.status) {
+                            Boundary.add({
+                                lat: parseFloat(json.lat),
+                                lng: parseFloat(json.long),
+                                radius: parseFloat(json.radius), // in meters
+                                id: 'place',
+                            })
+                            Boundary.on(Events.ENTER, id => {
+                                // Prints 'Get out of my Chipotle!!'
+                                console.log(`Get out of my ${id}!!`);
+                                getToken().then(data => {
+                                    fetch(domain + 'enterexit/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Token ' + data
+                                        },
+                                        body: JSON.stringify({
+                                            'action': 'enter'
+                                        })
+                                    }).then(res => {
+                                        if (res.ok) {
+                                            return res.json()
+                                        } else {
+                                            throw res.json()
+                                        }
+                                    })
+                                        .then(json => { console.log(json) })
+                                })
+                            });
 
+                            Boundary.on(Events.EXIT, id => {
+                                // Prints 'Ya! You better get out of my Chipotle!!'
+                                console.log(`Ya! You better get out of my ${id}!!`)
+                                getToken().then(data => {
+                                    fetch(domain + 'enterexit/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Token ' + data
+                                        },
+                                        body: JSON.stringify({
+                                            'action': 'exit'
+                                        })
+                                    }).then(res => {
+                                        if (res.ok) {
+                                            return res.json()
+                                        } else {
+                                            throw res.json()
+                                        }
+                                    })
+                                        .then(json => { console.log(json) })
+                                })
+                            })
+                        }
+                    })
+            })
+        console.log('add place')
         return ReactNativeForegroundService.start({
             id: 144,
             title: "QuaranClean",
@@ -97,7 +156,6 @@ export default function RootScreen() {
 
     return (
         <View>
-            {/* <Text>Welcome to the location tracking application.</Text> */}
         </View>
     )
 }
