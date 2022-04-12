@@ -28,7 +28,6 @@ export default function RootScreen() {
     useEffect(() => {
         onStart()
     }, [])
-    // Checking if the task i am going to create already exist and running, which means that the foreground is also running.
     const onStart = () => {
         console.log('onStart')
         if (ReactNativeForegroundService.is_task_running('taskid'))

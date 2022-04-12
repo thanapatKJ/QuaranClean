@@ -15,6 +15,8 @@ import { PermissionsAndroid } from 'react-native';
 
 import Boundary, { Events } from 'react-native-boundary';
 
+import RNLocation from 'react-native-location';
+
 
 export default function QuarantinePlace({ navigation }) {
   const globalContext = useContext(Context)
@@ -28,7 +30,7 @@ export default function QuarantinePlace({ navigation }) {
   const [address, _address] = useState('');
   const [start_date, _start_date] = useState('');
   const [end_date, _end_date] = useState('');
-  
+
   useEffect(() => {
     PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
@@ -70,67 +72,6 @@ export default function QuarantinePlace({ navigation }) {
                 _address(json.address)
                 _start_date(json.start_datetime)
                 _end_date(json.end_datetime)
-
-                // Boundary.add({
-                //   lat: parseFloat(lat),
-                //   lng: parseFloat(long),
-                //   radius: parseFloat(radius), // in meters
-                //   id: 'place',
-                // })
-                //   .then(() => console.log("success!"))
-                //   .catch(e => console.error("error :(", e));
-
-                // Boundary.on(Events.ENTER, id => {
-                //   // Prints 'Get out of my Chipotle!!'
-                //   console.log(`Get out of my ${id}!!`);
-                //   getToken().then(data => {
-                //     fetch(domain + 'enterexit/', {
-                //       method: 'POST',
-                //       headers: {
-                //         'Accept': 'application/json',
-                //         'Content-Type': 'application/json',
-                //         'Authorization': 'Token ' + data
-                //       },
-                //       body: JSON.stringify({
-                //         'action': 'enter'
-                //       })
-                //     }).then(res => {
-                //       if (res.ok) {
-                //         return res.json()
-                //       } else {
-                //         throw res.json()
-                //       }
-                //     })
-                //       .then(json => { console.log(json) })
-                //   })
-
-                // });
-
-                // Boundary.on(Events.EXIT, id => {
-                //   // Prints 'Ya! You better get out of my Chipotle!!'
-                //   console.log(`Ya! You better get out of my ${id}!!`)
-                //   getToken().then(data => {
-                //     fetch(domain + 'enterexit/', {
-                //       method: 'POST',
-                //       headers: {
-                //         'Accept': 'application/json',
-                //         'Content-Type': 'application/json',
-                //         'Authorization': 'Token ' + data
-                //       },
-                //       body: JSON.stringify({
-                //         'action': 'exit'
-                //       })
-                //     }).then(res => {
-                //       if (res.ok) {
-                //         return res.json()
-                //       } else {
-                //         throw res.json()
-                //       }
-                //     })
-                //       .then(json => { console.log(json) })
-                //   })
-                // })
-
               } else {
                 _status(json.status)
                 _name('')
@@ -170,7 +111,19 @@ export default function QuarantinePlace({ navigation }) {
     });
     return unsubscribe;
   })
-
+  function getPosition() {
+    console.log('123456789')
+      RNLocation.requestPermission({
+        android: {
+          detail: 'fine',
+        },
+      })
+      RNLocation.getLatestLocation({ timeout: 60000 })
+      .then((locations) => {
+            _lat(locations.latitude)
+            _long(locations.longitude)
+      });
+  }
   function sendPlaceData() {
     if (name && lat && long && radius && address) {
       getToken()
@@ -269,7 +222,6 @@ export default function QuarantinePlace({ navigation }) {
         })
     }
   }
-
   function sendQuit() {
     getToken()
       .then(data => {
@@ -373,7 +325,19 @@ export default function QuarantinePlace({ navigation }) {
                 : <></>
 
               }</>
-            : <Button title="Confirm" onPress={sendPlaceData} />
+            :
+            <View style={styles.fixToText}>
+              <Button
+                title="Get current position"
+                color="#03C04A"
+                onPress={getPosition}
+              />
+              <Button
+                title="Confirm Quarantine"
+                onPress={sendPlaceData}
+              />
+            </View>
+            // <Button title="Confirm" onPress={sendPlaceData} />
           }
         </ScrollView>
       </View >
@@ -403,5 +367,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     color: 'black'
   },
-
+  fixToText: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 });

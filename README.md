@@ -48,4 +48,4 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - Fix bugs 
-    - Fixing bugs ExitEnter
+    - Adding and Fixing bugs Get Current Position
