@@ -113,15 +113,16 @@ export default function QuarantinePlace({ navigation }) {
   })
   function getPosition() {
     console.log('123456789')
-      RNLocation.requestPermission({
-        android: {
-          detail: 'fine',
-        },
-      })
+      // RNLocation.requestPermission({
+      //   android: {
+      //     detail: 'fine',
+      //   },
+      // })
       RNLocation.getLatestLocation({ timeout: 60000 })
       .then((locations) => {
             _lat(locations.latitude)
             _long(locations.longitude)
+            console.log(locations)
       });
   }
   function sendPlaceData() {

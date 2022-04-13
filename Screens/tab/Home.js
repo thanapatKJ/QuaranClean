@@ -1,20 +1,26 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Dimensions, StyleSheet, TouchableOpacity, View, Text, Alert } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
 
 import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 
+import RNLocation from 'react-native-location';
+
 const { width, height } = Dimensions.get('window');
 
 
+
 const ASPECT_RATIO = width / height;
-const LATITUDE = 13.7279279;
-const LONGITUDE = 100.5497879;
+// const LATITUDE = 13.7279279;
+// const LONGITUDE = 100.5497879;
 const LATITUDE_DELTA = 0.0009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
+  const [LATITUDE,_LATITUDE] = useState()
+  const [LONGITUDE,_LONGITUDE] = useState()
+
   const globalContext = useContext(Context)
   const { domain, getToken,
     lat, _lat,
@@ -25,34 +31,17 @@ export default function Home({ navigation }) {
     getLocation, setLocation, removeLocation,
     getStatus, setStatus, removeStatus } = globalContext;
 
-  // RNLocation.configure({
-  //   distanceFilter: 5, // Meters
-  //   desiredAccuracy: {
-  //     ios: "bestForNavigation",
-  //     android: "highAccuracy"
-  //   },
-  //   // Android only
-  //   androidProvider: "auto",
-  //   interval: 5000, // Milliseconds
-  //   fastestInterval: 1000, // Milliseconds
-  //   maxWaitTime: 5000, // Milliseconds
-  // })
-  // RNLocation.requestPermission({
-  //   android: {
-  //     detail: "fine",
-  //     rationale: {
-  //       title: "We need to access your location",
-  //       message: "We use your location to show where you are on the map",
-  //       buttonPositive: "OK",
-  //       buttonNegative: "Cancel"
-  //     }
-  //   }
-  // })
-
-
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Home Screen')
+      RNLocation.getLatestLocation({ timeout: 60000 })
+        .then((locations) => {
+          _LATITUDE(locations.latitude)
+          _LONGITUDE(locations.longitude)
+
+          // console.log(locations)
+        })
       getToken()
         .then(data => {
           fetch(domain + 'quarantine/', {
@@ -107,12 +96,12 @@ export default function Home({ navigation }) {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           style={styles.map}
-        initialRegion={{
-          latitude: LATITUDE,
-          longitude: LONGITUDE,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }}
+          initialRegion={{
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }}
         // initialRegion={onUserLocationChange}
         // onUser
         // ref = {(mapView) => {mapView}}
