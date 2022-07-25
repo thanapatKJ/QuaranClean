@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View } from "react-native";
+import { View ,Alert} from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
@@ -10,7 +10,7 @@ import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 import Boundary, { Events } from 'react-native-boundary';
 
 RNLocation.configure({
-    distanceFilter: 10, // Meters
+    // distanceFilter: 10, // Meters
     desiredAccuracy: {
         android: 'highAccuracy',
     },
@@ -18,9 +18,23 @@ RNLocation.configure({
     interval: 5000, // Milliseconds
     fastestInterval: 1000, // Milliseconds
     maxWaitTime: 5000, // Milliseconds
-});
-let locationSubscription = null;
-
+    allowsBackgroundLocationUpdates: true
+})
+// RNLocation.requestPermission({
+//     ios: "whenInUse",
+//     android: {
+//         detail: "fine"
+//     }
+// }).then(granted => {
+//     if (granted) {
+//         this.locationSubscription = RNLocation.subscribeToLocationUpdates(locations => {
+//             console.log(locations)
+//         })
+//     }
+//     else {
+//         console.log('false')
+//     }
+// })
 export default function RootScreen() {
     const globalContext = useContext(Context)
     const { domain, getToken } = globalContext;
@@ -36,25 +50,14 @@ export default function RootScreen() {
         console.log('add task taskid')
         ReactNativeForegroundService.add_task(
             () => {
-                // RNLocation.requestPermission({
-                //     android: {
-                //         detail: 'fine',
-                //     },
-                // }).then((granted) => {
-                //     // if has permissions try to obtain location with RN location
-                //     if (granted) {
-                //         locationSubscription = RNLocation.subscribeToLocationUpdates(
-                //             ([locations]) => {
-                //                 // console.log(locations);
-                //                 locationSubscription();
-                //             },
-                //         );
-                //     }
-                //     else {
-                //         locationSubscription && locationSubscription();
-                //         console.log('no permissions to obtain location');
-                //     }
-                // });
+
+                RNLocation.getLatestLocation({ timeout: 60000 })
+                    .then((locations) => {
+                        // console.log(locations.fromMockProvider)
+                        if(locations.fromMockProvider){
+                            Alert.alert('Spoofing GPS location is deteced')
+                        }
+                    })
             },
             {
                 delay: 1000,

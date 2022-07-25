@@ -96,12 +96,12 @@ export default function Home({ navigation }) {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           style={styles.map}
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+          // initialRegion={{
+          //   latitude: LATITUDE,
+          //   longitude: LONGITUDE,
+          //   latitudeDelta: LATITUDE_DELTA,
+          //   longitudeDelta: LONGITUDE_DELTA,
+          // }}
         // initialRegion={onUserLocationChange}
         // onUser
         // ref = {(mapView) => {mapView}}

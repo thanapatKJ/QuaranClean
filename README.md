@@ -48,4 +48,4 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 
 Descriptions
 - Fix bugs 
-    - Adding initial region to user current position
+    <!-- - Adding initial region to user current position -->

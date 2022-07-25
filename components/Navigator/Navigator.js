@@ -5,6 +5,8 @@ import { View } from 'react-native';
 import Register from '../../Screens/frontpage/Register';
 import Login from '../../Screens/frontpage/Login';
 import RegisterCam from '../../Screens/frontpage/RegisterCam';
+import GPS from '../../Screens/frontpage/GPS';
+import TestGPS from '../../Screens/frontpage/TestGPS';
 // import Login from '../../Screens/frontpage/Login_copy';
 // import Landing from '../../Screens/frontpage/Landing';
 
@@ -87,6 +89,8 @@ export default function Navigator() {
                     {/* <StackApp.Screen name="Landing" component={Landing} options={navOptionHandler} /> */}
                     <StackApp.Screen name="Login" component={Login} options={navOptionHandler} />
                     <StackApp.Screen name="Register" component={Register} />
+                    <StackApp.Screen name="GPS" component={GPS} />
+                    <StackApp.Screen name="TestGPS" component={TestGPS} />
                     <StackApp.Screen name="RegisterCam" component={RegisterCam} />
                 </>
                 :

@@ -4,11 +4,12 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Context } from "../../components/globalContext/globalContext";
-import ReactNativeForegroundService from "@supersami/rn-foreground-service";
+import RNLocation from 'react-native-location';
 
 export default function Login({ navigation }) {
   const globalContext = useContext(Context)
@@ -25,7 +26,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       _regImg(require('../../assets/images/portrait.png'))
-      console.log('Login Screen')      
+      console.log('Login Screen')
       getToken()
         .then(data => {
           // console.log('token : ' + data)
@@ -67,41 +68,61 @@ export default function Login({ navigation }) {
     console.log(domain)
     console.log('sendLoginData')
     setError("")
-    let body = JSON.stringify({
-      'username': idcard,
-      'password': password
-    })
-    fetch(domain + 'login/', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+    RNLocation.configure({
+      // distanceFilter: 10, // Meters
+      desiredAccuracy: {
+        android: 'highAccuracy',
       },
-      body: body
+      androidProvider: 'playServices',
+      interval: 3000, // Milliseconds
+      fastestInterval: 1000, // Milliseconds
+      maxWaitTime: 5000, // Milliseconds
+      allowsBackgroundLocationUpdates: true
     })
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        } else {
-          console.log('not ok')
-          setError("Invalid Credentials")
-          throw res.json()
+    RNLocation.getLatestLocation({ timeout: 60000 })
+      .then((locations) => {
+        if (locations.fromMockProvider) {
+          Alert.alert('Spoofing GPS location is deteced\nPlease uninstall it.')
         }
-      })
-      .then(json => {
-        setUserObj(json)
-        setToken(json.token)
-        getToken()
-          .then(data => {
-            console.log('data ' + data)
+        else {
+          let body = JSON.stringify({
+            'username': idcard,
+            'password': password
           })
-        setIsLoggedIn(true)
-        navigation.replace('Tab')
-        
+          fetch(domain + 'login/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: body
+          })
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else {
+                console.log('not ok')
+                setError("Invalid Credentials")
+                throw res.json()
+              }
+            })
+            .then(json => {
+              setUserObj(json)
+              setToken(json.token)
+              getToken()
+                .then(data => {
+                  console.log('data ' + data)
+                })
+              setIsLoggedIn(true)
+              navigation.replace('Tab')
 
-      })
-      .catch(error => {
-        console.log(error)
+
+            })
+            .catch(error => {
+              console.log(error)
+            })
+
+        }
       })
   }
 
@@ -146,6 +167,19 @@ export default function Login({ navigation }) {
           style={styles.button2}
         >
           <Text style={styles.singUp}>SIGN UP</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
+          onPress={() => navigation.navigate('GPS')}
+          style={styles.button2}
+        >
+          <Text style={styles.singUp}>GPS</Text>
+        </TouchableOpacity> */}
+        
+        <TouchableOpacity
+          onPress={() => navigation.navigate('TestGPS')}
+          style={styles.button2}
+        >
+          <Text style={styles.singUp}>TestGPS</Text>
         </TouchableOpacity>
       </View>
     </View>
