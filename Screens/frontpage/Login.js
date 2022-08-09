@@ -168,19 +168,6 @@ export default function Login({ navigation }) {
         >
           <Text style={styles.singUp}>SIGN UP</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate('GPS')}
-          style={styles.button2}
-        >
-          <Text style={styles.singUp}>GPS</Text>
-        </TouchableOpacity> */}
-        
-        <TouchableOpacity
-          onPress={() => navigation.navigate('TestGPS')}
-          style={styles.button2}
-        >
-          <Text style={styles.singUp}>TestGPS</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

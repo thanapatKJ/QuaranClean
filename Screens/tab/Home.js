@@ -18,8 +18,8 @@ const LATITUDE_DELTA = 0.0009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
-  const [LATITUDE,_LATITUDE] = useState()
-  const [LONGITUDE,_LONGITUDE] = useState()
+  const [LATITUDE, _LATITUDE] = useState()
+  const [LONGITUDE, _LONGITUDE] = useState()
 
   const globalContext = useContext(Context)
   const { domain, getToken,
@@ -30,8 +30,14 @@ export default function Home({ navigation }) {
     _name,
     getLocation, setLocation, removeLocation,
     getStatus, setStatus, removeStatus } = globalContext;
+  RNLocation.getLatestLocation({ timeout: 60000 })
+    .then((locations) => {
+      _LATITUDE(locations.latitude)
+      _LONGITUDE(locations.longitude)
 
-  
+      console.log(locations)
+    })
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Home Screen')
@@ -40,7 +46,7 @@ export default function Home({ navigation }) {
           _LATITUDE(locations.latitude)
           _LONGITUDE(locations.longitude)
 
-          // console.log(locations)
+          console.log(locations)
         })
       getToken()
         .then(data => {
@@ -96,12 +102,12 @@ export default function Home({ navigation }) {
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           style={styles.map}
-          // initialRegion={{
-          //   latitude: LATITUDE,
-          //   longitude: LONGITUDE,
-          //   latitudeDelta: LATITUDE_DELTA,
-          //   longitudeDelta: LONGITUDE_DELTA,
-          // }}
+          initialRegion={{
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }}
         // initialRegion={onUserLocationChange}
         // onUser
         // ref = {(mapView) => {mapView}}

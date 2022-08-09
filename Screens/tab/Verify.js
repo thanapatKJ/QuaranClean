@@ -19,7 +19,7 @@ import RNLocation from 'react-native-location';
 
 export default function Verify({ navigation }) {
   const globalContext = useContext(Context)
-  const { getToken, domain } = globalContext;
+  const { getToken, domain, token, _token } = globalContext;
   const [lat, _lat] = useState();
   const [long, _long] = useState();
 
@@ -37,6 +37,7 @@ export default function Verify({ navigation }) {
       console.log('Verify Screen')
       getToken()
         .then(data => {
+          _token(data)
           fetch(domain + 'verify/', {
             method: 'GET',
             headers: {
@@ -91,36 +92,30 @@ export default function Verify({ navigation }) {
 
   function sendVerify() {
     console.log("sendVerifylocation")
-    getToken()
-      .then(data => {
-        fetch(domain + 'profile/', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + data
-          }
-        })
-          .then(res => {
-            if (res.ok) {
-              return res.json()
-            } else {
-              throw res.json()
-            }
-          })
-          .then(json => {
+    fetch(domain + 'profile/', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + token
+      }
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        } else {
+          throw res.json()
+        }
+      })
+      .then(json => {
 
-            FaceSDK.startLiveness(result => {
-              result = LivenessResponse.fromJson(JSON.parse(result))
-              if (result.bitmap != null && result["liveness"] == 0) {
-                photoImage.bitmap = result.bitmap
-                photoImage.imageType = Enum.ImageType.LIVE
-              }
-              else {
-                return
-              }
-            }, e => { })
-
+        FaceSDK.startLiveness(result => {
+          result = LivenessResponse.fromJson(JSON.parse(result))
+          if (result.bitmap != null && result["liveness"] == 0) {
+            photoImage.bitmap = result.bitmap
+            photoImage.imageType = Enum.ImageType.LIVE
+            console.log('bitmap')
+            console.log('pass')
             RNFetchBlob.fetch('GET', domain + 'user_images/' + json.id_cards + '.jpg', {
             }).then((res) => {
               let status = res.info().status;
@@ -134,7 +129,6 @@ export default function Verify({ navigation }) {
                 request = new MatchFacesRequest()
                 request.images = [serverImage, photoImage]
                 console.log('Passed Matching')
-
                 FaceSDK.matchFaces(JSON.stringify(request), response => {
                   response = MatchFacesResponse.fromJson(JSON.parse(response))
                   FaceSDK.matchFacesSimilarityThresholdSplit(JSON.stringify(response.results), 0.98, str => {
@@ -144,38 +138,31 @@ export default function Verify({ navigation }) {
                       console.log('passed')
                       RNLocation.getLatestLocation({ timeout: 60000 })
                         .then((locations) => {
-                          getToken()
-                            .then(data => {
-                              fetch(domain + 'verify/', {
-                                method: 'POST',
-                                headers: {
-                                  'Accept': 'application/json',
-                                  'Content-Type': 'application/json',
-                                  'Authorization': 'Token ' + data
-                                },
-                                body: JSON.stringify({
-                                  'lat': locations.latitude,
-                                  'long': locations.longitude
-                                })
-                              })
-                                .then(res => {
-                                  if (res.ok) {
-                                    return res.json()
-                                  } else {
-                                    throw res.json()
-                                  }
-                                })
-                                .then(json => {
-                                  if (json.status == 'success') {
-                                    console.log('success')
-                                    Alert.alert("Send Verify Signal to server.")
-                                    navigation.navigate('Home')
-                                  }
-                                })
+                          fetch(domain + 'verify/', {
+                            method: 'POST',
+                            headers: {
+                              'Accept': 'application/json',
+                              'Content-Type': 'application/json',
+                              'Authorization': 'Token ' + token
+                            },
+                            body: JSON.stringify({
+                              'lat': locations.latitude,
+                              'long': locations.longitude
                             })
-
-                            .catch(error => {
-                              Alert.alert("ERROR " + error)
+                          })
+                            .then(res => {
+                              if (res.ok) {
+                                return res.json()
+                              } else {
+                                throw res.json()
+                              }
+                            })
+                            .then(json => {
+                              if (json.status == 'success') {
+                                console.log('success')
+                                Alert.alert("Send Verify Signal to server.")
+                                navigation.navigate('Home')
+                              }
                             })
                         });
 
@@ -187,10 +174,8 @@ export default function Verify({ navigation }) {
                 }, e => { })
               }
             }).catch((errorMessage, statusCode) => { })
-
-
-
-          })
+          }
+        }, e => { })
       })
       .catch(error => {
         console.log("ERROR " + error)

@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Context = createContext()
 const Provider = ({ children }) => {
-    const [domain] = useState("http://192.168.39.50:8000/api/")
+    const [domain] = useState("http://192.168.1.117:8000/api/")
     // const [domainImage] = useState("http://192.168.90.50:8000/database/user_images/")
     const [isLoggedIn, setIsLoggedIn] = useState(true)
     const [userObj, setUserObj] = useState()
@@ -21,6 +21,7 @@ const Provider = ({ children }) => {
     const [regCpassword, _regCpassword] = useState()
     const [regEmail, _regEmail] = useState()
     const [regImg, _regImg] = useState(require('../../assets/images/portrait.png'))
+    const [token, _token] = useState() 
 
     const setToken = async (token) => {
         try {
@@ -133,6 +134,7 @@ const Provider = ({ children }) => {
         regCpassword, _regCpassword,
         regEmail, _regEmail,
         regImg, _regImg,
+        token, _token,
 
         getStatus, setStatus, removeStatus,
         getLocation, setLocation, removeLocation,

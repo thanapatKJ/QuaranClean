@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
+import { Image, Button, SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
 
@@ -14,6 +14,7 @@ export default function Profile({ navigation, props }) {
     setUserObj,
     getToken,
     removeToken } = globalContext;
+
 
   const [name, _name] = useState('');
   const [lastname, _lastname] = useState('');
@@ -96,21 +97,91 @@ export default function Profile({ navigation, props }) {
   }
 
   return (
-    <SafeAreaView>
+    <View style={styles.container}>
       <Header />
-      <Text>Name {name} {lastname}</Text>
-      <Text>ID card Number: {idcard}</Text>
-      <Text>Phone Number: {numbers}</Text>
-      <Text>Email: {email}</Text>
-      <Button
-        title='change password'
-        onPress={() => navigation.navigate('ChangePassword')}
+      <Image
+        style={{
+          aspectRatio: 1.5, resizeMode: 'contain', marginTop: 30, marginLeft: 45,
+        }}
+        source={{ uri: domain + 'user_images/' + idcard + '.jpg' }}
       />
-      <Button
-        title='Sign Out'
-        onPress={logout}
-      />
-    </SafeAreaView>
+      <Text style={styles.text1}>{name} {lastname}</Text>
+      <Text style={styles.text3}>{idcard}</Text>
+      <Text style={styles.text2}>{numbers}</Text>
+      <Text style={styles.text2}>{email}</Text>
+      <View style={styles.rect1Column}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ChangePassword')}
+          style={styles.button1}
+        >
+          <Text style={styles.singIn}>Change Password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={logout}
+          style={styles.button2}
+        >
+          <Text style={styles.singUp}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0)"
+  },
+  text1: {
+    color: "rgba(0,0,0,255)",
+    fontSize: 30,
+    width: '100%',
+    // height: 112,
+    textAlign: "center",
+    marginTop: 30,
+    // marginBottom: 20,
+  },
+  text3: {
+    color: "rgba(0,0,0,255)",
+    fontSize: 30,
+    width: '100%',
+    // height: 112,
+    textAlign: "center",
+    // marginTop: 30,
+    marginBottom: 20,
+  },
+  text2: {
+    color: "rgba(0,0,0,255)",
+    fontSize: 20,
+    width: '100%',
+    textAlign: "center",
+    marginBottom: 2,
+  },
+  button1: {
+    height: 44,
+    backgroundColor: "rgba(37,205,236,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginBottom: 20,
+    marginTop: 30,
+
+  },
+  singIn: {
+    color: "rgba(0,0,0,1)",
+    alignSelf: "center"
+  },
+  button2: {
+    height: 44,
+    backgroundColor: "rgba(37,205,236,1)",
+    borderRadius: 5,
+    justifyContent: "center"
+  },
+  singUp: {
+    color: "rgba(0,0,0,1)",
+    alignSelf: "center"
+  },
+  rect1Column: {
+    marginBottom: 188,
+    marginLeft: 41,
+    marginRight: 41
+  }
+});
