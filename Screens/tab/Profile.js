@@ -122,10 +122,12 @@ export default function Profile({ navigation, props }) {
         >
           <Text style={styles.singUp}>Sign Out</Text>
         </TouchableOpacity> */}
+
+        
       </View>
     </View>
   );
-  
+
 }
 const styles = StyleSheet.create({
   container: {
