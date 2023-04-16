@@ -125,6 +125,7 @@ export default function Profile({ navigation, props }) {
       </View>
     </View>
   );
+  
 }
 const styles = StyleSheet.create({
   container: {
