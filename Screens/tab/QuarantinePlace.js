@@ -68,7 +68,7 @@ export default function QuarantinePlace({ navigation }) {
                 _name(json.name)
                 _lat(json.lat)
                 _long(json.long)
-                _radius(json.radius)
+                _radius(parseInt(json.radius))
                 _address(json.address)
                 _start_date(json.start_datetime)
                 _end_date(json.end_datetime)

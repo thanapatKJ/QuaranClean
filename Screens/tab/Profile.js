@@ -116,12 +116,12 @@ export default function Profile({ navigation, props }) {
         >
           <Text style={styles.singIn}>Change Password</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={logout}
           style={styles.button2}
         >
           <Text style={styles.singUp}>Sign Out</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
