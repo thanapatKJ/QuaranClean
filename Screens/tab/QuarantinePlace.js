@@ -8,6 +8,7 @@ import {
   Alert,
   TextInput,
   ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
@@ -113,16 +114,16 @@ export default function QuarantinePlace({ navigation }) {
   })
   function getPosition() {
     console.log('123456789')
-      // RNLocation.requestPermission({
-      //   android: {
-      //     detail: 'fine',
-      //   },
-      // })
-      RNLocation.getLatestLocation({ timeout: 60000 })
+    // RNLocation.requestPermission({
+    //   android: {
+    //     detail: 'fine',
+    //   },
+    // })
+    RNLocation.getLatestLocation({ timeout: 60000 })
       .then((locations) => {
-            _lat(locations.latitude)
-            _long(locations.longitude)
-            console.log(locations)
+        _lat(locations.latitude)
+        _long(locations.longitude)
+        console.log(locations)
       });
   }
   function sendPlaceData() {
@@ -164,54 +165,59 @@ export default function QuarantinePlace({ navigation }) {
                   .catch(e => console.error("error :(", e));
 
                 Boundary.on(Events.ENTER, id => {
-                  // Prints 'Get out of my Chipotle!!'
-                  console.log(`Get out of my ${id}!!`);
-                  getToken().then(data => {
-                    fetch(domain + 'enterexit/', {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Token ' + data
-                      },
-                      body: JSON.stringify({
-                        'action': 'enter'
-                      })
-                    }).then(res => {
-                      if (res.ok) {
-                        return res.json()
-                      } else {
-                        throw res.json()
+                  RNLocation.getLatestLocation({ timeout: 60000 })
+                    .then((locations) => {
+                      if (locations.accuracy) {
+                        getToken().then(data => {
+                          fetch(domain + 'enterexit/', {
+                            method: 'POST',
+                            headers: {
+                              'Accept': 'application/json',
+                              'Content-Type': 'application/json',
+                              'Authorization': 'Token ' + data
+                            },
+                            body: JSON.stringify({
+                              'action': 'enter'
+                            })
+                          }).then(res => {
+                            if (res.ok) {
+                              return res.json()
+                            } else {
+                              throw res.json()
+                            }
+                          })
+                            .then(json => { console.log(json) })
+                        })
                       }
                     })
-                      .then(json => { console.log(json) })
-                  })
-
                 });
 
                 Boundary.on(Events.EXIT, id => {
-                  // Prints 'Ya! You better get out of my Chipotle!!'
-                  console.log(`Ya! You better get out of my ${id}!!`)
-                  getToken().then(data => {
-                    fetch(domain + 'enterexit/', {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Token ' + data
-                      },
-                      body: JSON.stringify({
-                        'action': 'exit'
-                      })
-                    }).then(res => {
-                      if (res.ok) {
-                        return res.json()
-                      } else {
-                        throw res.json()
+                  RNLocation.getLatestLocation({ timeout: 60000 })
+                    .then((locations) => {
+                      if (locations.accuracy) {
+                        getToken().then(data => {
+                          fetch(domain + 'enterexit/', {
+                            method: 'POST',
+                            headers: {
+                              'Accept': 'application/json',
+                              'Content-Type': 'application/json',
+                              'Authorization': 'Token ' + data
+                            },
+                            body: JSON.stringify({
+                              'action': 'exit'
+                            })
+                          }).then(res => {
+                            if (res.ok) {
+                              return res.json()
+                            } else {
+                              throw res.json()
+                            }
+                          })
+                            .then(json => { console.log(json) })
+                        })
                       }
                     })
-                      .then(json => { console.log(json) })
-                  })
                 })
                 navigation.navigate('Home')
               }
@@ -320,8 +326,15 @@ export default function QuarantinePlace({ navigation }) {
               </View>
               {canQuit
                 ?
-                <View>
-                  <Button title="Quit" onPress={sendQuit} />
+
+                <View style={styles.rect1Column}>
+                  {/* <TouchableOpacity
+                    onPress={() => { sendQuit }}
+                    style={styles.button1}
+                  >
+                    <Text style={styles.singIn}>Quit</Text>
+                  </TouchableOpacity> */}
+                  <Button title="Quit" style={styles.button1} onPress={sendQuit} />
                 </View>
                 : <></>
 
@@ -373,4 +386,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  button1: {
+    height: 44,
+    backgroundColor: "rgba(37,205,236,1)",
+    borderRadius: 5,
+    justifyContent: "center",
+    marginBottom: 20,
+    marginTop: 30,
+  },
+  singIn: {
+    color: "rgba(0,0,0,1)",
+    alignSelf: "center"
+  },
+  rect1Column: {
+    marginTop: 30,
+    marginBottom: 188,
+    marginLeft: 41,
+    marginRight: 41
+  }
 });

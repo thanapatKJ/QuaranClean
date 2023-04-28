@@ -103,7 +103,7 @@ export default function Profile({ navigation, props }) {
         style={{
           aspectRatio: 1.5, resizeMode: 'contain', marginTop: 30, marginLeft: 45,
         }}
-        source={{ uri: domain + 'user_images/' + idcard + '.jpg' }}
+        source={{ uri: domain + 'user_images/' + idcard + '.jpg' ,cache:"force-cache"}}
       />
       <Text style={styles.text1}>{name} {lastname}</Text>
       <Text style={styles.text3}>{idcard}</Text>
@@ -116,12 +116,12 @@ export default function Profile({ navigation, props }) {
         >
           <Text style={styles.singIn}>Change Password</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={logout}
           style={styles.button2}
         >
           <Text style={styles.singUp}>Sign Out</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
 
         
       </View>
@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 20,
     marginTop: 30,
-
   },
   singIn: {
     color: "rgba(0,0,0,1)",
@@ -176,7 +175,8 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: "rgba(37,205,236,1)",
     borderRadius: 5,
-    justifyContent: "center"
+    justifyContent: "center",
+    opacity: 0.0
   },
   singUp: {
     color: "rgba(0,0,0,1)",

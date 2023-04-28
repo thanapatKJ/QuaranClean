@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View ,Alert} from "react-native";
+import { View, Alert } from "react-native";
 
 import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
@@ -10,7 +10,7 @@ import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 import Boundary, { Events } from 'react-native-boundary';
 
 RNLocation.configure({
-    // distanceFilter: 10, // Meters
+    distanceFilter: 10, // Meters
     desiredAccuracy: {
         android: 'highAccuracy',
     },
@@ -54,7 +54,7 @@ export default function RootScreen() {
                 RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
                         // console.log(locations.fromMockProvider)
-                        if(locations.fromMockProvider){
+                        if (locations.fromMockProvider) {
                             Alert.alert('Spoofing GPS location is deteced')
                         }
                     })
@@ -97,53 +97,60 @@ export default function RootScreen() {
                                 id: 'place',
                             })
                             Boundary.on(Events.ENTER, id => {
-                                // Prints 'Get out of my Chipotle!!'
-                                console.log(`Get out of my ${id}!!`);
-                                getToken().then(data => {
-                                    fetch(domain + 'enterexit/', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Accept': 'application/json',
-                                            'Content-Type': 'application/json',
-                                            'Authorization': 'Token ' + data
-                                        },
-                                        body: JSON.stringify({
-                                            'action': 'enter'
-                                        })
-                                    }).then(res => {
-                                        if (res.ok) {
-                                            return res.json()
-                                        } else {
-                                            throw res.json()
+                                RNLocation.getLatestLocation({ timeout: 60000 })
+                                    .then((locations) => {
+                                        if (locations.accuracy <= 15) {
+                                            getToken().then(data => {
+                                                fetch(domain + 'enterexit/', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Accept': 'application/json',
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': 'Token ' + data
+                                                    },
+                                                    body: JSON.stringify({
+                                                        'action': 'enter'
+                                                    })
+                                                }).then(res => {
+                                                    if (res.ok) {
+                                                        return res.json()
+                                                    } else {
+                                                        throw res.json()
+                                                    }
+                                                })
+                                                    .then(json => { console.log(json) })
+                                            })
                                         }
                                     })
-                                        .then(json => { console.log(json) })
-                                })
+
                             });
 
                             Boundary.on(Events.EXIT, id => {
-                                // Prints 'Ya! You better get out of my Chipotle!!'
-                                console.log(`Ya! You better get out of my ${id}!!`)
-                                getToken().then(data => {
-                                    fetch(domain + 'enterexit/', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Accept': 'application/json',
-                                            'Content-Type': 'application/json',
-                                            'Authorization': 'Token ' + data
-                                        },
-                                        body: JSON.stringify({
-                                            'action': 'exit'
-                                        })
-                                    }).then(res => {
-                                        if (res.ok) {
-                                            return res.json()
-                                        } else {
-                                            throw res.json()
+                                RNLocation.getLatestLocation({ timeout: 60000 })
+                                    .then((locations) => {
+                                        if (locations.accuracy <= 15) {
+                                            getToken().then(data => {
+                                                fetch(domain + 'enterexit/', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Accept': 'application/json',
+                                                        'Content-Type': 'application/json',
+                                                        'Authorization': 'Token ' + data
+                                                    },
+                                                    body: JSON.stringify({
+                                                        'action': 'exit'
+                                                    })
+                                                }).then(res => {
+                                                    if (res.ok) {
+                                                        return res.json()
+                                                    } else {
+                                                        throw res.json()
+                                                    }
+                                                })
+                                                    .then(json => { console.log(json) })
+                                            })
                                         }
                                     })
-                                        .then(json => { console.log(json) })
-                                })
                             })
                         }
                     })

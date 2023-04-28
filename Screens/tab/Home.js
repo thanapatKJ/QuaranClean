@@ -7,19 +7,21 @@ import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 
 import RNLocation from 'react-native-location';
 
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
+
 const { width, height } = Dimensions.get('window');
 
 
 
 const ASPECT_RATIO = width / height;
-// const LATITUDE = 13.7279279;
-// const LONGITUDE = 100.5497879;
+const LATITUDE = 13.7279279;
+const LONGITUDE = 100.5497879;
 const LATITUDE_DELTA = 0.0009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
-  const [LATITUDE, _LATITUDE] = useState()
-  const [LONGITUDE, _LONGITUDE] = useState()
+  const [LATITUDE, _LATITUDE] = useState(13.7279279)
+  const [LONGITUDE, _LONGITUDE] = useState(100.5497879)
 
   const globalContext = useContext(Context)
   const { domain, getToken,
