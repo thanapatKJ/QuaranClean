@@ -38,8 +38,14 @@ RNLocation.configure({
 export default function RootScreen() {
     const globalContext = useContext(Context)
     const { domain, getToken } = globalContext;
+    const [currentDate, setCurrentDate] = useState('');
 
     useEffect(() => {
+        // var hours = new Date().getHours(); //Current Hours
+        // var min = new Date().getMinutes(); //Current Minutes
+        // var sec = new Date().getSeconds(); //Current Seconds
+        // setCurrentDate(hours + ':' + min + ':' + sec);
+        console.log(currentDate)
         onStart()
     }, [])
     const onStart = () => {
@@ -48,6 +54,7 @@ export default function RootScreen() {
             return;
         // Creating a task.
         console.log('add task taskid')
+        
         ReactNativeForegroundService.add_task(
             () => {
 

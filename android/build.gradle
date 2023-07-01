@@ -2,6 +2,8 @@
 
 buildscript {
     ext {
+        googlePlayServicesVersion = "17.+" // default: "+"
+
         buildToolsVersion = "30.0.2"
         minSdkVersion = 21
         compileSdkVersion = 30
@@ -9,6 +11,8 @@ buildscript {
         ndkVersion = "21.4.7075529"
 
         kotlin_version = '1.6.10' // <- add this line
+        supportLibVersion = "23.1.1" // default: 23.1.1
+
 
     }
     repositories {

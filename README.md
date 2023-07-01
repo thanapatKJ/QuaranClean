@@ -23,7 +23,7 @@ npm install @react-native-reanimated@2.2.4
 npm install  react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
 
 - Maps
-"react-native-maps": "0.30.1",
+"react-native-maps": "^1.0.0",
 
 - Axios
 "axios": "^0.25.0",
@@ -46,6 +46,11 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - Camera
 "react-native-camera": "^4.2.1",
 
+- Push Notification
+"react-native-push-notification": "^8.1.1",
+
+- reanimated
+"react-native-reanimated": "^2.2.4",
+
 Descriptions
-- Fix bugs 
-    <!-- - Adding initial region to user current position -->
+- Add notification

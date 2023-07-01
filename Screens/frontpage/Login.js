@@ -11,6 +11,8 @@ import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Context } from "../../components/globalContext/globalContext";
 import RNLocation from 'react-native-location';
 
+import PushNotification from 'react-native-push-notification';
+
 export default function Login({ navigation }) {
   const globalContext = useContext(Context)
   const {
@@ -64,6 +66,14 @@ export default function Login({ navigation }) {
     return unsubscribe;
   })
 
+
+  // function notify() {
+  //   PushNotification.localNotification({
+  //     channelId: "Verify",
+  //     title: "Verify yourself.",
+  //     message: "Please verify yourself within 30 minutes"
+  //   })
+  // }
   function sendLoginData() {
     console.log(domain)
     console.log('sendLoginData')

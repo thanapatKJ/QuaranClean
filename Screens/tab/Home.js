@@ -8,6 +8,7 @@ import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 import RNLocation from 'react-native-location';
 
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
+import PushNotification from 'react-native-push-notification';
 
 const { width, height } = Dimensions.get('window');
 
@@ -96,6 +97,14 @@ export default function Home({ navigation }) {
     })
     return unsubscribe;
   })
+  const createChannels = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "Notify",
+        channelName: "Notify"
+      }
+    )
+  }
   return (
     <View>
       <Header />

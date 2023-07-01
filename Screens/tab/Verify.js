@@ -14,7 +14,7 @@ import { _LogBoxInspectorContainer } from 'react-native/Libraries/LogBox/LogBoxI
 import FaceSDK, { Enum, FaceCaptureResponse, MatchFacesResponse, MatchFacesRequest, MatchFacesImage, MatchFacesSimilarityThresholdSplit, LivenessResponse } from '@regulaforensics/react-native-face-api'
 import RNFetchBlob from 'rn-fetch-blob'
 import RNLocation from 'react-native-location';
-
+import PushNotification from 'react-native-push-notification';
 
 
 export default function Verify({ navigation }) {
@@ -90,6 +90,13 @@ export default function Verify({ navigation }) {
     return unsubscribe;
   })
 
+  function notify() {
+    PushNotification.localNotification({
+      channelId: "Notify",
+      title: "Inactivate.",
+      message: "Please verify yourself within 30 minutes"
+    })
+  }
   function sendVerify() {
     console.log("sendVerifylocation")
     fetch(domain + 'profile/', {
@@ -206,6 +213,9 @@ export default function Verify({ navigation }) {
                   <Button
                     title="Press To Verify"
                     onPress={sendVerify} />
+                  <Button
+                    title="Press To Notify"
+                    onPress={notify} />
                 </View>
                 : <>
                   {inactive
