@@ -13,7 +13,6 @@ export default function App() {
   return (
     <Provider>
       <View style={{ flex: 1 }}>
-        {/* <RootScreen /> */}
         <NavigationContainer>
           <Navigator />
         </NavigationContainer>

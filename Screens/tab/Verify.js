@@ -92,9 +92,10 @@ export default function Verify({ navigation }) {
 
   function notify() {
     PushNotification.localNotification({
-      channelId: "Notify",
+      channelId: "Outside",
       title: "Inactivate.",
-      message: "Please verify yourself within 30 minutes"
+      message: "Please verify yourself within 30 minutes",
+      priority: "high",
     })
   }
   function sendVerify() {

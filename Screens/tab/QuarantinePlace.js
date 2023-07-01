@@ -167,7 +167,7 @@ export default function QuarantinePlace({ navigation }) {
                 Boundary.on(Events.ENTER, id => {
                   RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
-                      if (locations.accuracy) {
+                      if (locations.accuracy <= 15) {
                         getToken().then(data => {
                           fetch(domain + 'enterexit/', {
                             method: 'POST',
@@ -195,7 +195,13 @@ export default function QuarantinePlace({ navigation }) {
                 Boundary.on(Events.EXIT, id => {
                   RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
-                      if (locations.accuracy) {
+                      if (locations.accuracy <= 15) {
+                        PushNotification.localNotification({
+                          channelId: "Outside",
+                          title: "You are outside of your quarantine place.",
+                          message: "Please go inside your quarantine place in 30 minutes.",
+                          priority: "high",
+                        })
                         getToken().then(data => {
                           fetch(domain + 'enterexit/', {
                             method: 'POST',

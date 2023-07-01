@@ -8,6 +8,9 @@ import { Context } from '../globalContext/globalContext';
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
 import Boundary, { Events } from 'react-native-boundary';
+import moment from 'moment/moment';
+
+import PushNotification from 'react-native-push-notification';
 
 RNLocation.configure({
     distanceFilter: 10, // Meters
@@ -20,32 +23,12 @@ RNLocation.configure({
     maxWaitTime: 5000, // Milliseconds
     allowsBackgroundLocationUpdates: true
 })
-// RNLocation.requestPermission({
-//     ios: "whenInUse",
-//     android: {
-//         detail: "fine"
-//     }
-// }).then(granted => {
-//     if (granted) {
-//         this.locationSubscription = RNLocation.subscribeToLocationUpdates(locations => {
-//             console.log(locations)
-//         })
-//     }
-//     else {
-//         console.log('false')
-//     }
-// })
+
 export default function RootScreen() {
     const globalContext = useContext(Context)
     const { domain, getToken } = globalContext;
-    const [currentDate, setCurrentDate] = useState('');
 
     useEffect(() => {
-        // var hours = new Date().getHours(); //Current Hours
-        // var min = new Date().getMinutes(); //Current Minutes
-        // var sec = new Date().getSeconds(); //Current Seconds
-        // setCurrentDate(hours + ':' + min + ':' + sec);
-        console.log(currentDate)
         onStart()
     }, [])
     const onStart = () => {
@@ -54,10 +37,34 @@ export default function RootScreen() {
             return;
         // Creating a task.
         console.log('add task taskid')
-        
+
         ReactNativeForegroundService.add_task(
             () => {
-
+                console.log('Date : ', moment().utcOffset('+07:00').format('HH:mm:ss'))
+                switch (moment().utcOffset('+07:00').format('HH:mm:ss')) {
+                    case "09:00:00":
+                    case "12:00:00":
+                    case "15:00:00":
+                    case "18:00:00":
+                    case "21:00:00":
+                        PushNotification.localNotification({
+                            channelId: "VerifyTime",
+                            title: "You are outside of your quarantine place.",
+                            message: "Please go inside your quarantine place in 30 minutes.",
+                            priority: "high",
+                        })
+                        break;
+                    case "20:48:00":
+                    case "20:48:50":
+                        PushNotification.localNotification({
+                            channelId: "Notify",
+                            title: "Test",
+                            message: "Test with ภาษาไทย",
+                            priority: "high",
+                        })
+                        console.log('Yeah')
+                        break;
+                }
                 RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
                         // console.log(locations.fromMockProvider)
@@ -136,6 +143,12 @@ export default function RootScreen() {
                                 RNLocation.getLatestLocation({ timeout: 60000 })
                                     .then((locations) => {
                                         if (locations.accuracy <= 15) {
+                                            PushNotification.localNotification({
+                                                channelId: "Outside",
+                                                title: "You are outside of your quarantine place.",
+                                                message: "Please go inside your quarantine place in 30 minutes.",
+                                                priority: "high",
+                                            })
                                             getToken().then(data => {
                                                 fetch(domain + 'enterexit/', {
                                                     method: 'POST',

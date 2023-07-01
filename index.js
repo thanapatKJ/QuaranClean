@@ -24,21 +24,22 @@ ReactNativeForegroundService.register();
 // })
 
 
-PushNotification.configure({
-    onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
-    },
-    onAction: function (notification) {
-        console.log("ACTION:", notification.action);
-        console.log("NOTIFICATION:", notification);
-    },
-    permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-    },
-    popInitialNotification: true,
-    requestPermissions: Platform.OS === 'ios',
-});
+// PushNotification.configure({
+//     // onNotification: function (notification) {
+//     //     console.log("NOTIFICATION:", notification);
+        
+//     // },
+//     onAction: function (notification) {
+//         console.log("ACTION:", notification.action);
+//         console.log("NOTIFICATION:", notification);
+//     },
+//     permissions: {
+//         alert: true,
+//         badge: true,
+//         sound: true,
+//     },
+//     popInitialNotification: true,
+//     requestPermissions: Platform.OS === 'ios',
+// });
 
 AppRegistry.registerComponent(appName, () => App);

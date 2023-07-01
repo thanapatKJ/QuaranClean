@@ -52,5 +52,9 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 - reanimated
 "react-native-reanimated": "^2.2.4",
 
+- moment.js
+"moment": "^2.29.4",
+
 Descriptions
-- Add notification
+- Can push notification to warn user to verify
+- Can push notification when user are outside
