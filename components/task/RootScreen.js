@@ -47,8 +47,8 @@ export default function RootScreen() {
                     case "15:00:00":
                     case "18:00:00":
                     case "21:00:00":
-                    case "00:47:20": //test
-                    case "00:47:25": //test
+                    // case "03:47:20": //test
+                    case "03:37:00": //test
 
                         getToken()
                             .then(data => {
