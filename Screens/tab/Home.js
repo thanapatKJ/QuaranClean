@@ -40,51 +40,6 @@ export default function Home({ navigation }) {
 
       // console.log(locations)
     })
-
-  PushNotification.configure({
-    onRegister: function (notification) {
-      Alert.alert("ERROR 555555555555")
-
-      console.log('000000000000000000000000000000')
-
-      // getToken()
-      //   .then(data => {
-      //     fetch(domain + 'quarantine/', {
-      //       method: 'GET',
-      //       headers: {
-      //         'Accept': 'application/json',
-      //         'Content-Type': 'application/json',
-      //         'Authorization': 'Token ' + data
-      //       },
-      //     })
-      //       .then(res => {
-      //         if (res.ok) {
-      //           return res.json()
-      //         } else {
-      //           throw res.json()
-      //         }
-      //       })
-      //       .then(json => {
-      //         if (json.quarantine_status === "unverified") {
-      //           console.log('HEY YEIIIOASDK')
-      //           // PushNotification.cancelAllLocalNotifications()
-      //         }
-      //       })
-      //   })
-      //   .catch(error => {
-      //     Alert.alert("ERROR " + error)
-      //   })
-      // notification.finish(PushNotificationIOS.FetchResult.NoData);
-
-    },
-    permissions: {
-      alert: true,
-      badge: true,
-      sound: true,
-    },
-    popInitialNotification: true,
-    requestPermissions: Platform.OS === 'ios',
-  })
   useEffect(() => {
     createChannels()
     const unsubscribe = navigation.addListener('focus', () => {
@@ -93,8 +48,6 @@ export default function Home({ navigation }) {
         .then((locations) => {
           _LATITUDE(locations.latitude)
           _LONGITUDE(locations.longitude)
-
-          // console.log(locations)
         })
       getToken()
         .then(data => {

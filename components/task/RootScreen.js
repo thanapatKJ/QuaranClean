@@ -47,22 +47,74 @@ export default function RootScreen() {
                     case "15:00:00":
                     case "18:00:00":
                     case "21:00:00":
-                        PushNotification.localNotification({
-                            channelId: "VerifyTime",
-                            title: "You are outside of your quarantine place.",
-                            message: "Please go inside your quarantine place in 30 minutes.",
-                            priority: "high",
-                        })
+                    case "00:47:20": //test
+                    case "00:47:25": //test
+
+                        getToken()
+                            .then(data => {
+                                fetch(domain + 'quarantine/', {
+                                    method: 'GET',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Token ' + data
+                                    },
+                                })
+                                    .then(res => {
+                                        if (res.ok) {
+                                            return res.json()
+                                        } else {
+                                            throw res.json()
+                                        }
+                                    })
+                                    .then(json => {
+                                        if (json.quarantine_status === "unverified") {
+                                            PushNotification.removeAllDeliveredNotifications();
+                                            PushNotification.localNotification({
+                                                channelId: "VerifyTime",
+                                                title: "Please verify yourself.",
+                                                message: "Please Verify yourself via QuaranClean Application inside your place within 30 minutes.",
+                                                priority: "high",
+                                            })
+                                        }
+                                    })
+                            })
+                            .catch(error => {
+                                Alert.alert("ERROR " + error)
+                            })
                         break;
-                    case "20:48:00":
-                    case "20:48:50":
-                        PushNotification.localNotification({
-                            channelId: "Notify",
-                            title: "Test",
-                            message: "Test with ภาษาไทย",
-                            priority: "high",
-                        })
-                        console.log('Yeah')
+                    case "00:00:10":
+                        getToken()
+                            .then(data => {
+                                fetch(domain + 'quarantine/', {
+                                    method: 'GET',
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Token ' + data
+                                    },
+                                })
+                                    .then(res => {
+                                        if (res.ok) {
+                                            return res.json()
+                                        } else {
+                                            throw res.json()
+                                        }
+                                    })
+                                    .then(json => {
+                                        if (json.usedStatus) {
+                                            PushNotification.removeAllDeliveredNotifications();
+                                            PushNotification.localNotification({
+                                                channelId: "VerifyTime",
+                                                title: "End of your quarantine.",
+                                                message: "Congratulation, It's the end of your quarantine. God bless you",
+                                                priority: "high",
+                                            })
+                                        }
+                                    })
+                            })
+                            .catch(error => {
+                            })
                         break;
                 }
                 RNLocation.getLatestLocation({ timeout: 60000 })
@@ -103,7 +155,7 @@ export default function RootScreen() {
                         }
                     })
                     .then(json => {
-                        if (json.status) {
+                        if (json.status  && json.quarantine_status!="inactive") {
                             Boundary.add({
                                 lat: parseFloat(json.lat),
                                 lng: parseFloat(json.long),
@@ -143,6 +195,7 @@ export default function RootScreen() {
                                 RNLocation.getLatestLocation({ timeout: 60000 })
                                     .then((locations) => {
                                         if (locations.accuracy <= 15) {
+                                            PushNotification.removeAllDeliveredNotifications();
                                             PushNotification.localNotification({
                                                 channelId: "Outside",
                                                 title: "You are outside of your quarantine place.",

@@ -196,6 +196,7 @@ export default function QuarantinePlace({ navigation }) {
                   RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
                       if (locations.accuracy <= 15) {
+                        PushNotification.removeAllDeliveredNotifications();
                         PushNotification.localNotification({
                           channelId: "Outside",
                           title: "You are outside of your quarantine place.",

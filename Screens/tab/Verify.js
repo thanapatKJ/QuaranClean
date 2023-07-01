@@ -91,12 +91,13 @@ export default function Verify({ navigation }) {
   })
 
   function notify() {
+    PushNotification.removeAllDeliveredNotifications();
     PushNotification.localNotification({
-      channelId: "Outside",
-      title: "Inactivate.",
-      message: "Please verify yourself within 30 minutes",
+      channelId: "VerifyTime",
+      title: "End of your quarantine.",
+      message: "Congratulation, It's the end of your quarantine. God bless you",
       priority: "high",
-    })
+  })
   }
   function sendVerify() {
     console.log("sendVerifylocation")
@@ -214,9 +215,9 @@ export default function Verify({ navigation }) {
                   <Button
                     title="Press To Verify"
                     onPress={sendVerify} />
-                  <Button
+                  {/* <Button
                     title="Press To Notify"
-                    onPress={notify} />
+                    onPress={notify} /> */}
                 </View>
                 : <>
                   {inactive
