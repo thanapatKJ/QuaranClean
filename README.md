@@ -56,5 +56,4 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 "moment": "^2.29.4",
 
 Descriptions
-- Can push notification to warn user to verify
-- Can push notification when user are outside
+- Change inactive -> On-hold

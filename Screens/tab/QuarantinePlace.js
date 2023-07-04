@@ -99,7 +99,7 @@ export default function QuarantinePlace({ navigation }) {
               }
             })
             .then(json => {
-              if (json.status === 'inactive' || json.status === "unverified") {
+              if (json.status === 'On-hold' || json.status === "unverified") {
                 _canQuit(false)
               } else {
                 _canQuit(true)

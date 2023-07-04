@@ -25,7 +25,7 @@ export default function Verify({ navigation }) {
 
   const [verified, _verified] = useState();
   const [unverified, _unverified] = useState();
-  const [inactive, _inactive] = useState();
+  const [onHold, _onHold] = useState();
   const [none, _none] = useState();
   const [next_time, _next_time] = useState('');
   var serverImage = new MatchFacesImage()
@@ -61,25 +61,25 @@ export default function Verify({ navigation }) {
                 _verified(true)
                 _unverified(false)
                 _none(false)
-                _inactive(false)
+                _onHold(false)
                 _next_time(json.next_time)
               } else if (json.status === 'unverified') {
                 console.log('unverified')
                 _unverified(true)
                 _verified(false)
                 _none(false)
-                _inactive(false)
+                _onHold(false)
               } else if (json.status === 'None') {
                 _none(true)
                 _unverified(false)
                 _verified(false)
-                _inactive(false)
-              } else if (json.status === 'inactive') {
-                console.log('inactive')
+                _onHold(false)
+              } else if (json.status === 'On-hold') {
+                console.log('On-hold')
                 _none(false)
                 _unverified(false)
                 _verified(false)
-                _inactive(true)
+                _onHold(true)
               }
             })
         })
@@ -220,11 +220,12 @@ export default function Verify({ navigation }) {
                     onPress={notify} /> */}
                 </View>
                 : <>
-                  {inactive
+                  {'On-hold'
                     ?
                     <View>
-                      <Text style={styles.title}>Your quarantine is inactive.</Text>
-                      <Text style={styles.title}>Please contact the admin.</Text>
+                      <Text style={styles.title1}>Your quarantine status is On-hold.</Text>
+                      <Text style={styles.title2}>Please contact the admin.</Text>
+                      <Text style={styles.title2}>quaranclean.server@gmail.com.</Text>
                     </View>
                     : <></>
                   }</>
@@ -240,5 +241,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 8,
     fontSize: 36,
+  },
+  title1: {
+    textAlign: 'center',
+    marginVertical: 54,
+    fontSize: 34,
+    color:"#000000",
+  },
+  title2: {
+    textAlign: 'center',
+    color:"#FF0000",
+    // marginVertical: 8,
+    fontSize: 24,
   },
 });
