@@ -8,7 +8,6 @@ import {
   Alert,
   TextInput,
   ScrollView,
-  TouchableOpacity
 } from 'react-native';
 import Header from '../../components/Header';
 import { Context } from '../../components/globalContext/globalContext';
@@ -167,7 +166,7 @@ export default function QuarantinePlace({ navigation }) {
                 Boundary.on(Events.ENTER, id => {
                   RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
-                      if (locations.accuracy <= 15) {
+                      if (locations.accuracy <= 20) {
                         getToken().then(data => {
                           fetch(domain + 'enterexit/', {
                             method: 'POST',
@@ -195,7 +194,7 @@ export default function QuarantinePlace({ navigation }) {
                 Boundary.on(Events.EXIT, id => {
                   RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
-                      if (locations.accuracy <= 15) {
+                      if (locations.accuracy <= 20) {
                         PushNotification.removeAllDeliveredNotifications();
                         PushNotification.localNotification({
                           channelId: "Outside",

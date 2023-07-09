@@ -167,9 +167,10 @@ export default function Verify({ navigation }) {
                               }
                             })
                             .then(json => {
+                              Alert.alert(json.status)
                               if (json.status == 'success') {
                                 console.log('success')
-                                Alert.alert("Send Verify Signal to server.")
+                                Alert.alert("Verify Success.")
                                 navigation.navigate('Home')
                               }
                             })

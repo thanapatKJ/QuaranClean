@@ -7,7 +7,6 @@ import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 
 import RNLocation from 'react-native-location';
 
-import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 import PushNotification from 'react-native-push-notification';
 
 const { width, height } = Dimensions.get('window');
@@ -15,14 +14,14 @@ const { width, height } = Dimensions.get('window');
 
 
 const ASPECT_RATIO = width / height;
-const LATITUDE = 13.7279279;
-const LONGITUDE = 100.5497879;
+// const LATITUDE = 13.7279279;
+// const LONGITUDE = 100.5497879;
 const LATITUDE_DELTA = 0.0009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default function Home({ navigation }) {
-  const [LATITUDE, _LATITUDE] = useState(13.7279279)
-  const [LONGITUDE, _LONGITUDE] = useState(100.5497879)
+  const [LATITUDE, _LATITUDE] = useState(13.8217182)
+  const [LONGITUDE, _LONGITUDE] = useState(100.5131097)
 
   const globalContext = useContext(Context)
   const { domain, getToken,
@@ -33,22 +32,37 @@ export default function Home({ navigation }) {
     _name,
     getLocation, setLocation, removeLocation,
     getStatus, setStatus, removeStatus } = globalContext;
-  RNLocation.getLatestLocation({ timeout: 60000 })
-    .then((locations) => {
+  // RNLocation.getLatestLocation({ timeout: 60000 })
+  //   .then((locations) => {
+  //     _LATITUDE(locations.latitude)
+  //     _LONGITUDE(locations.longitude)
+
+  //     // console.log(locations)
+  //   })
+  useEffect(() => {
+
+    (async () => {
+
+      let locations = await RNLocation.getLatestLocation()
       _LATITUDE(locations.latitude)
       _LONGITUDE(locations.longitude)
+      console.log(locations.latitude + "")
 
-      // console.log(locations)
-    })
-  useEffect(() => {
+    })();
+
     createChannels()
+    // RNLocation.getLatestLocation({ timeout: 1000 })
+    //   .then((locations) => {
+    //     _LATITUDE(locations.latitude)
+    //     _LONGITUDE(locations.longitude)
+    //   })
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Home Screen')
-      RNLocation.getLatestLocation({ timeout: 60000 })
-        .then((locations) => {
-          _LATITUDE(locations.latitude)
-          _LONGITUDE(locations.longitude)
-        })
+      // RNLocation.getLatestLocation({ timeout: 60000 })
+      //   .then((locations) => {
+      //     _LATITUDE(locations.latitude)
+      //     _LONGITUDE(locations.longitude)
+      //   })
       getToken()
         .then(data => {
           fetch(domain + 'quarantine/', {

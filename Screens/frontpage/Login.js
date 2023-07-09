@@ -11,7 +11,6 @@ import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 import { Context } from "../../components/globalContext/globalContext";
 import RNLocation from 'react-native-location';
 
-import PushNotification from 'react-native-push-notification';
 
 export default function Login({ navigation }) {
   const globalContext = useContext(Context)

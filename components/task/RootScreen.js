@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Alert } from "react-native";
 
-import { PermissionsAndroid } from 'react-native';
 import RNLocation from 'react-native-location';
 import { Context } from '../globalContext/globalContext';
 
@@ -40,6 +39,7 @@ export default function RootScreen() {
 
         ReactNativeForegroundService.add_task(
             () => {
+                
                 console.log('Date : ', moment().utcOffset('+07:00').format('HH:mm:ss'))
                 switch (moment().utcOffset('+07:00').format('HH:mm:ss')) {
                     case "09:00:00":
@@ -48,7 +48,7 @@ export default function RootScreen() {
                     case "18:00:00":
                     case "21:00:00":
                     // case "03:47:20": //test
-                    case "03:37:00": //test
+                    // case "03:37:00": //test
 
                         getToken()
                             .then(data => {
@@ -119,7 +119,7 @@ export default function RootScreen() {
                 }
                 RNLocation.getLatestLocation({ timeout: 60000 })
                     .then((locations) => {
-                        // console.log(locations.fromMockProvider)
+                        console.log(locations)
                         if (locations.fromMockProvider) {
                             Alert.alert('Spoofing GPS location is deteced')
                         }
@@ -165,7 +165,7 @@ export default function RootScreen() {
                             Boundary.on(Events.ENTER, id => {
                                 RNLocation.getLatestLocation({ timeout: 60000 })
                                     .then((locations) => {
-                                        if (locations.accuracy <= 15) {
+                                        if (locations.accuracy <= 20) {
                                             getToken().then(data => {
                                                 fetch(domain + 'enterexit/', {
                                                     method: 'POST',
@@ -194,12 +194,12 @@ export default function RootScreen() {
                             Boundary.on(Events.EXIT, id => {
                                 RNLocation.getLatestLocation({ timeout: 60000 })
                                     .then((locations) => {
-                                        if (locations.accuracy <= 15) {
-                                            PushNotification.removeAllDeliveredNotifications();
+                                        if (locations.accuracy <= 20) {
+                                            // PushNotification.removeAllDeliveredNotifications();
                                             PushNotification.localNotification({
                                                 channelId: "Outside",
                                                 title: "You are outside of your quarantine place.",
-                                                message: "Please go inside your quarantine place in 30 minutes.",
+                                                message: "Please go inside your quarantine place in 5 minutes.",
                                                 priority: "high",
                                             })
                                             getToken().then(data => {

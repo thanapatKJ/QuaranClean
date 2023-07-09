@@ -56,4 +56,5 @@ npm install  react-native-gesture-handler react-native-screens react-native-safe
 "moment": "^2.29.4",
 
 Descriptions
-- Change inactive -> On-hold
+- Change some alert to teacher suggestion
+- set to 20meter
