@@ -7,6 +7,8 @@ import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
 import Boundary from 'react-native-boundary';
 
+import PushNotification from 'react-native-push-notification';
+
 export default function Profile({ navigation, props }) {
   const globalContext = useContext(Context)
   const {
@@ -58,6 +60,45 @@ export default function Profile({ navigation, props }) {
     })
     return unsubscribe;
   })
+  function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time)
+    )
+  }
+  function notify() {
+    sleep(5000).then(() => {
+      console.log('you can see me after 2000 milliseconds');
+      PushNotification.removeAllDeliveredNotifications();
+      PushNotification.localNotification({
+        channelId: "VerifyTime",
+        title: "Please verify yourself.",
+        message: "Please Verify yourself via QuaranClean Application inside your place within 30 minutes.",
+        priority: "high",
+      })
+    })
+  }
+
+  function unverify() {
+    try {
+      getToken()
+        .then(data => {
+          console.log('getToken Data ' + data)
+          fetch(domain + 'unverify/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Token ' + data
+            },
+            body: JSON.stringify({
+              'action': 'enter'
+            })
+          })
+
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   function logout() {
     try {
@@ -103,7 +144,7 @@ export default function Profile({ navigation, props }) {
         style={{
           aspectRatio: 1.5, resizeMode: 'contain', marginTop: 30, marginLeft: 45,
         }}
-        source={{ uri: domain + 'user_images/' + idcard + '.jpg' ,cache:"force-cache"}}
+        source={{ uri: domain + 'user_images/' + idcard + '.jpg', cache: "force-cache" }}
       />
       <Text style={styles.text1}>{name} {lastname}</Text>
       <Text style={styles.text3}>{idcard}</Text>
@@ -123,7 +164,18 @@ export default function Profile({ navigation, props }) {
           <Text style={styles.singUp}>Sign Out</Text>
         </TouchableOpacity>
 
-        
+        <TouchableOpacity
+          onPress={notify}
+          style={styles.button2}
+        >
+          <Text style={styles.singUp}>Notify in 5 seconds</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={unverify}
+          style={styles.button2}
+        >
+          <Text style={styles.singUp}>unverify</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
